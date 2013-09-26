@@ -640,15 +640,285 @@ class DeleteAlertResults
 end
 
 
+#Departed
+class DepartedRequest
+  attr_accessor :airport, :filter, :howMany, :offset 
+  def initialize(airport = nil, filter = nil, howMany = nil, offset = nil)
+    @airport = airport
+    @filter = filter
+    @howMany = howMany
+    @offset = offset
+  end 
+  def post
+    "airport=#@airport&filter=#@filter&howMany=#@howMany&offset=#@offset"
+  end
+end
+
+class DepartedResults
+  attr_accessor :departedResult
+  def initialize(departedResult = nil)
+    departedResult = JSON.parse(departedResult)['DepartedResult']
+    @departedResult = DepartureStruct.new([], departedResult['next_offset'])
+    departedResult['departures'].each do |departure|
+      @departedResult.departures << DepartureFlightStruct.new(departure['actualarrivaltime'],
+                                                              departure['actualdeparturetime'],
+                                                              departure['aircrafttype'],
+                                                              departure['destination'],
+                                                              departure['destinationCity'],
+                                                              departure['destinationName'],
+                                                              departure['estimatedarrivaltime'],
+                                                              departure['ident'],
+                                                              departure['origin'],
+                                                              departure['originCity'],
+                                                              departure['originName']
+                                                              )
+    end
+  end
+end
+
+class DepartureStruct
+  attr_accessor :departures, :next_offset
+  def initialize (departures = [], next_offset = nil)
+    @departures = departures
+    @next_offset = next_offset
+  end
+end
+
+class DepartureFlightStruct
+  attr_accessor :actualarrivaltime, 
+                :actualdeparturetime, 
+                :aircrafttype, 
+                :destination, 
+                :destinationCity, 
+                :destinationName,
+                :estimatedarrivaltime, 
+                :ident, 
+                :origin, 
+                :originCity, 
+                :originName
+                
+  def initialize(actualarrivaltime = nil,
+                 actualdeparturetime = nil,
+                 aircrafttype = nil,
+                 destination = nil,
+                 destinationCity = nil,
+                 destinationName = nil,
+                 estimatedarrivaltime = nil,
+                 ident = nil,
+                 origin = nil,
+                 originCity = nil,
+                 originName = nil
+                ) 
+    @actualarrivaltime = actualarrivaltime
+    @actualdeparturetime = actualdeparturetime
+    @aircrafttype = aircrafttype
+    @destination = destination
+    @destinationCity = destinationCity
+    @destinationName = destinationName
+    @estimatedarrivaltime = estimatedarrivaltime
+    @ident = ident
+    @origin = origin
+    @originCity = originCity
+    @originName = originName
+  end
+end
 
 
+#Enroute
+class EnrouteRequest
+  attr_accessor :airport, :filter, :howMany, :offset 
+  def initialize(airport = nil, filter = nil, howMany = nil, offset = nil)
+    @airport = airport
+    @filter = filter
+    @howMany = howMany
+    @offset = offset
+  end 
+  def post
+    "airport=#@airport&filter=#@filter&howMany=#@howMany&offset=#@offset"
+  end
+end
+
+class EnrouteResults
+  attr_accessor :enrouteResult
+  def initialize(enrouteResult = nil)
+    enrouteResult = JSON.parse(enrouteResult)['EnrouteResult']
+    @enrouteResult = EnrouteStruct.new([], enrouteResult['next_offset'])
+    enrouteResult['enroute'].each do |enroute|
+      @enrouteResult.enroute << EnrouteFlightStruct.new(enroute['actualdeparturetime'],
+                                                  enroute['aircrafttype'],
+                                                  enroute['destination'],
+                                                  enroute['destinationCity'],
+                                                  enroute['destinationName'],
+                                                  enroute['estimatedarrivaltime'],
+                                                  enroute['filed_departuretime'],
+                                                  enroute['ident'],
+                                                  enroute['origin'],
+                                                  enroute['originCity'],
+                                                  enroute['originName']
+                                                  )
+    end
+  end
+end
+
+class EnrouteStruct
+  attr_accessor :enroute, :next_offset
+  def initialize (enroute = [], next_offset = nil)
+    @enroute = enroute
+    @next_offset = next_offset
+  end
+end
+
+class EnrouteFlightStruct
+  attr_accessor :actualdeparturetime, 
+                :aircrafttype, 
+                :destination, 
+                :destinationCity, 
+                :destinationName,
+                :estimatedarrivaltime,
+                :filed_departuretime, 
+                :ident, 
+                :origin, 
+                :originCity, 
+                :originName
+                
+  def initialize(actualdeparturetime = nil,
+                 aircrafttype = nil,
+                 destination = nil,
+                 destinationCity = nil,
+                 destinationName = nil,
+                 estimatedarrivaltime = nil,
+                 filed_departuretime = nil,
+                 ident = nil,
+                 origin = nil,
+                 originCity = nil,
+                 originName = nil
+                ) 
+    @actualdeparturetime = actualdeparturetime
+    @aircrafttype = aircrafttype
+    @destination = destination
+    @destinationCity = destinationCity
+    @destinationName = destinationName
+    @estimatedarrivaltime = estimatedarrivaltime
+    @filed_departuretime = filed_departuretime
+    @ident = ident
+    @origin = origin
+    @originCity = originCity
+    @originName = originName
+  end
+end
+
+#FleetArrived
+class FleetArrivedRequest
+  attr_accessor :fleet, :howMany, :offset 
+  def initialize(fleet = nil, howMany = nil, offset = nil)
+    @fleet = fleet
+    @howMany = howMany
+    @offset = offset
+  end 
+  def post
+    "fleet=#@fleet&howMany=#@howMany&offset=#@offset"
+  end
+end
+
+class FleetArrivedResults
+  attr_accessor :fleetArrivedResult
+  def initialize(fleetArrivedResult = nil)
+    fleetArrivedResult = JSON.parse(fleetArrivedResult)['FleetArrivedResult']
+    @fleetArrivedResult = ArrivalStruct.new([], fleetArrivedResult['next_offset'])
+    fleetArrivedResult['arrivals'].each do |arrival|
+      @fleetArrivedResult.arrivals << ArrivalFlightStruct.new(arrival['actualarrivaltime'],
+                                                              arrival['actualdeparturetime'],
+                                                              arrival['aircrafttype'],
+                                                              arrival['destination'],
+                                                              arrival['destinationCity'],
+                                                              arrival['destinationName'],
+                                                              arrival['ident'],
+                                                              arrival['origin'],
+                                                              arrival['originCity'],
+                                                              arrival['originName']
+                                                              )
+    end
+  end
+end
 
 
+#FleetScheduled
+class FleetScheduledRequest
+  attr_accessor :fleet, :howMany, :offset 
+  def initialize(fleet = nil, howMany = nil, offset = nil)
+    @fleet = fleet
+    @howMany = howMany
+    @offset = offset
+  end 
+  def post
+    "fleet=#@fleet&howMany=#@howMany&offset=#@offset"
+  end
+end
 
+class FleetScheduledResults
+  attr_accessor :fleetScheduledResult
+  def initialize(fleetScheduledResult = nil)
+    fleetScheduledResult = JSON.parse(fleetScheduledResult)['FleetScheduledResult']
+    @fleetScheduledResult = ScheduledStruct.new(fleetScheduledResult['next_offset'], [])
+    fleetScheduledResult['scheduled'].each do |scheduled|
+      @fleetScheduledResult.scheduled << ScheduledFlightStruct.new(scheduled['aircrafttype'],
+                                                                   scheduled['destination'],
+                                                                   scheduled['destinationCity'],
+                                                                   scheduled['destinationName'],
+                                                                   scheduled['estimatedarrivaltime'],
+                                                                   scheduled['filed_departuretime'],
+                                                                   scheduled['ident'],
+                                                                   scheduled['origin'],
+                                                                   scheduled['originCity'],
+                                                                   scheduled['originName']
+                                                                  )
+    end
+  end
+end
 
+class ScheduledStruct
+  attr_accessor :next_offset, :scheduled
+  def initialize (next_offset = nil, scheduled = [])
+    @next_offset = next_offset
+    @scheduled = scheduled
+  end
+end
 
-
-
+class ScheduledFlightStruct
+  attr_accessor :aircrafttype, 
+                :destination, 
+                :destinationCity, 
+                :destinationName,
+                :estimatedarrivaltime,
+                :filed_departuretime, 
+                :ident, 
+                :origin, 
+                :originCity, 
+                :originName
+                
+  def initialize(aircrafttype = nil,
+                 destination = nil,
+                 destinationCity = nil,
+                 destinationName = nil,
+                 estimatedarrivaltime = nil,
+                 filed_departuretime = nil,
+                 ident = nil,
+                 origin = nil,
+                 originCity = nil,
+                 originName = nil
+                ) 
+    @aircrafttype = aircrafttype
+    @destination = destination
+    @destinationCity = destinationCity
+    @destinationName = destinationName
+    @estimatedarrivaltime = estimatedarrivaltime
+    @filed_departuretime = filed_departuretime
+    @ident = ident
+    @origin = origin
+    @originCity = originCity
+    @originName = originName
+  end
+end
 
 
 #FlightInfo

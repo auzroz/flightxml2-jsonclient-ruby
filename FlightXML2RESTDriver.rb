@@ -73,19 +73,21 @@ require './FlightXML2REST.rb'
     end
     
     def Departed(departedRequest)
-      
+      @departedResult = DepartedResults.new($api['Departed'].post departedRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
     
     def Enroute(enrouteRequest)
-      
+      @enrouteResult = EnrouteResults.new($api['Enroute'].post enrouteRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
     
     def FleetArrived(fleetArrivedRequest)
-      
+      @fleetArrivedResult = FleetArrivedResults.new($api['FleetArrived'].post fleetArrivedRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def FleetScheduled(fleetScheduledRequest)
-      
+      @fleetScheduledResult = FleetScheduledResults.new($api['FleetScheduled'].post fleetScheduledRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def FlightInfo(flightInfoRequest)
       flightInfoResult = FlightInfoResults.new($api['FlightInfo'].post flightInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
       @flightInfoResult = flightInfoResult   

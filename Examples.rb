@@ -67,7 +67,21 @@ pp result.decodeRouteResult
 result = test.DeleteAlert(DeleteAlertRequest.new(1))
 pp result.deleteAlertResult
 
+#Departed
+result = test.Departed(DepartedRequest.new('KSFO', 'ga', 15, 0 ))
+pp result.departedResult
 
+#Enroute
+result = test.Enroute(EnrouteRequest.new('KSFO', 'ga', 15, 0 ))
+pp result.enrouteResult
+
+#FleetArrived
+result = test.FleetArrived(FleetArrivedRequest.new('SKW', 15, 0))
+pp result.fleetArrivedResult
+
+#FleetScheduled
+result = test.FleetScheduled(FleetScheduledRequest.new('SKW', 15, 0))
+pp result.fleetScheduledResult
 
 #FlightInfo
 result = test.FlightInfo(FlightInfoRequest.new(15, 'SKW6400'))
