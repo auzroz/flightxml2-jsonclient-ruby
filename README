@@ -5,6 +5,10 @@ FlightXML2REST
 Implements the FlightXML2 API available from FlightAware utilizing a RESTful architecture (as opposed the already available SOAP architecture).
 Most methods are available in the same way as the SOAP client.
 
+[![Code Climate](https://codeclimate.com/github/auzroz/flightxml2-jsonclient-ruby.png)](https://codeclimate.com/github/auzroz/flightxml2-jsonclient-ruby)
+
+[![Coverage Status](https://coveralls.io/repos/auzroz/flightxml2-jsonclient-ruby/badge.png)](https://coveralls.io/r/auzroz/flightxml2-jsonclient-ruby)
+
 ----------------------------------------------------------------------
 FlightXML
 
