@@ -38,8 +38,8 @@ class AirlineFlightInfoRequest
 end
 
 class AirlineFlightInfoResults
-    attr_accessor :airlineFlightInfoResults
-  def initialize(airlineFlightInfoResults = nil)
+    attr_accessor :airlineFlightInfoResult
+  def initialize(airlineFlightInfoResult = nil)
     airlineFlightInfoResult = JSON.parse(airlineFlightInfoResult)['AirlineFlightInfoResult']
     @airlineFlightInfoResult = AirlineFlightInfoStruct.new(
                                                             airlineFlightInfoResult['bag_claim'],
@@ -82,7 +82,7 @@ class AirlineFlightInfoStruct
                   ident = nil, 
                   meal_service = nil, 
                   seats_cabin_business = nil,
-                  seats_cabin_coash = nil,
+                  seats_cabin_coach = nil,
                   seats_cabin_first = nil,
                   tailnumber = nil,
                   terminal_dest = nil,
@@ -95,7 +95,7 @@ class AirlineFlightInfoStruct
     @ident = ident
     @meal_service = meal_service 
     @seats_cabin_business = seats_cabin_business
-    @seats_cabin_coach = seat_cabin_coach
+    @seats_cabin_coach = seats_cabin_coach
     @seats_cabin_first = seats_cabin_first
     @tailnumber = tailnumber
     @terminal_dest = terminal_dest
@@ -441,7 +441,7 @@ class ArrivedResults
                                                          arrival['ident'],
                                                          arrival['origin'],
                                                          arrival['originCity'],
-                                                         arrival['originName'],
+                                                         arrival['originName']
                                                          )
     end
   end
@@ -488,5 +488,397 @@ class ArrivalFlightStruct
     @origin = origin
     @originCity = originCity
     @originName = originName
+  end
+end
+
+
+#BlockIdentCheck
+class BlockIdentCheckRequest
+  attr_accessor :ident  
+  def initialize(ident = nil)
+    @ident = ident
+  end 
+  def post
+    "ident=#@ident"
+  end
+end
+
+class BlockIdentCheckResults
+  attr_accessor :blockIdentCheckResult
+  def initialize(blockIdentCheckResult = nil)
+    blockIdentCheckResult = JSON.parse(blockIdentCheckResult)['BlockIdentCheckResult']
+    @blockIdentCheckResult = blockIdentCheckResult
+  end
+end
+
+
+#CountAirportOperations
+class CountAirportOperationsRequest
+  attr_accessor :airport
+  def initialize(airport = nil)
+    @airport = airport
+  end 
+  def post
+    "airport=#@airport"
+  end
+end
+
+class CountAirportOperationsResults
+  attr_accessor :countAirportOperationsResult
+  def initialize(countAirportOperationsResult = nil)
+    countAirportOperationsResult = JSON.parse(countAirportOperationsResult)['CountAirportOperationsResult']
+    @countAirportOperationsResult = CountAirportOperationsStruct.new(countAirportOperationsResult['departed'], 
+                                                           countAirportOperationsResult['enroute'], 
+                                                           countAirportOperationsResult['scheduled_arrivals'],
+                                                           countAirportOperationsResult['scheduled_departures']
+                                                          )
+  end
+end
+
+class CountAirportOperationsStruct
+  attr_accessor :departed, :enroute, :scheduled_arrivals, :scheduled_departures
+  def initialize (departed = nil, enroute = nil, scheduled_arrivals = nil, scheduled_departures = nil)
+    @departed = departed
+    @enroute = enroute
+    @scheduled_arrivals = scheduled_arrivals
+    @scheduled_departures = scheduled_departures
+  end
+end
+
+#DecodeFlightRoute
+class DecodeFlightRouteRequest
+  attr_accessor :faFlightID
+  def initialize(faFlightID = nil)
+    @faFlightID = faFlightID
+  end 
+  def post
+    "faFlightID=#@faFlightID"
+  end
+end
+
+class DecodeFlightRouteResults
+  attr_accessor :decodeFlightRouteResult
+  def initialize(decodeFlightRouteResult = nil)
+    decodeFlightRouteResult= JSON.parse(decodeFlightRouteResult)['DecodeFlightRouteResult']
+    @decodeFlightRouteResult  = ArrayOfFlightRouteStruct.new([],decodeFlightRouteResult['next_offset'])
+    decodeFlightRouteResult['data'].each do |data|
+      @decodeFlightRouteResult.data << FlightRouteStruct.new(data['latitude'],
+                                                             data['longitude'],
+                                                             data['name'],
+                                                             data['type']
+                                                            )
+    end
+  end
+end
+
+class FlightRouteStruct
+  attr_accessor :latitude, :longitude, :name, :type
+  def initialize (latitude = nil, longitude = nil, name = nil, type = nil)
+    @latitude = latitude
+    @longitude = longitude
+    @name = name
+    @type = type
+  end
+end
+
+class ArrayOfFlightRouteStruct
+  attr_accessor :data, :next_offset
+  def initialize (data = [], next_offset = nil)
+    @data = data
+    @next_offset = next_offset
+  end
+end
+
+
+#DecodeRoute
+class DecodeRouteRequest
+  attr_accessor :destination, :origin, :route
+  def initialize(destination = nil, origin = nil, route = nil)
+    @destination = destination
+    @origin = origin
+    @route = route
+  end 
+  def post
+    "destination=#@destination&origin=#@origin&route=#@route"
+  end
+end
+
+class DecodeRouteResults
+  attr_accessor :decodeRouteResult
+  def initialize(decodeRouteResult = nil)
+    puts decodeRouteResult
+    decodeRouteResult = JSON.parse(decodeRouteResult)['DecodeRouteResult']
+    @decodeRouteResult  = ArrayOfFlightRouteStruct.new([],decodeRouteResult['next_offset'])
+    decodeRouteResult['data'].each do |data|
+      @decodeRouteResult.data << FlightRouteStruct.new(data['latitude'],
+                                                       data['longitude'],
+                                                       data['name'],
+                                                       data['type']
+                                                      )
+    end
+  end
+end
+
+
+#DeleteAlert
+class DeleteAlertRequest
+  attr_accessor :alert_id  
+  def initialize(alert_id = nil)
+    @alert_id = alert_id
+  end 
+  def post
+    "alert_id=#@alert_id"
+  end
+end
+
+class DeleteAlertResults
+  attr_accessor :deleteAlertResult
+  def initialize(deleteAlertResult = nil)
+    deleteAlertResult = JSON.parse(deleteAlertResult)['DeleteAlertResult']
+    @deleteAlertResult = deleteAlertResult
+  end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+#FlightInfo
+class FlightInfoRequest
+  attr_accessor :howMany, :ident
+  def initialize(howMany = nil, ident = nil)
+    @howMany = howMany
+    @ident = ident
+  end 
+  def post
+    "howMany=#@howMany&ident=#@ident"
+  end
+end
+
+class FlightInfoResults
+  attr_accessor :flightInfoResult
+  def initialize(flightInfoResult = nil)
+    flightInfoResult = JSON.parse(flightInfoResult)['FlightInfoResult']
+    @flightInfoResult = FlightInfoStruct.new([], flightInfoResult['next_offset'])
+    flightInfoResult['flights'].each do |flight|
+      @flightInfoResult.flights << FlightStruct.new(flight['actualarrivaltime'],
+                                                    flight['actualdeparturetime'],
+                                                    flight['aircrafttype'],
+                                                    flight['destination'],
+                                                    flight['destinationCity'],
+                                                    flight['destinationName'],
+                                                    flight['diverted'],
+                                                    flight['estimatedarrivaltime'],
+                                                    flight['filed_airspeed_kts'],
+                                                    flight['filed_airspeed_mach'],
+                                                    flight['filed_altitude'],
+                                                    flight['filed_departuretime'],
+                                                    flight['filed_ete'],
+                                                    flight['filed_time'],
+                                                    flight['ident'],
+                                                    flight['origin'],
+                                                    flight['originCity'],
+                                                    flight['originName'],
+                                                    flight['route']
+                                                   )
+    end
+  end
+end
+
+class FlightInfoStruct
+  attr_accessor :flights, :next_offset
+  def initialize (flights = [], next_offset = nil)
+    @flights = flights
+    @next_offset = next_offset
+  end
+end
+
+class FlightStruct
+  attr_accessor :actualarrivaltime,
+                :actualdeparturetime,
+                :aircrafttype,
+                :destination,
+                :destinationCity,
+                :destinationName,
+                :diverted,
+                :estimatedarrivaltime,
+                :filed_airspeed_kts,
+                :filed_airspeed_mach,
+                :filed_altitude,
+                :filed_departuretime,
+                :filed_ete,
+                :filed_time,
+                :ident,
+                :origin,
+                :originCity,
+                :originName,
+                :route
+                
+  def initialize (actualarrivaltime = nil,
+                  actualdeparturetime = nil,
+                  aircrafttype = nil,
+                  destination = nil,
+                  destinationCity = nil,
+                  destinationName = nil,
+                  diverted = nil,
+                  estimatedarrivaltime = nil,
+                  filed_airspeed_kts = nil,
+                  filed_airspeed_mach = nil,
+                  filed_altitude = nil,
+                  filed_departuretime = nil,
+                  filed_ete = nil,
+                  filed_time = nil,
+                  ident = nil,
+                  origin = nil,
+                  originCity = nil,
+                  originName = nil,
+                  route = nil
+                 )
+    @actualarrivaltime = actualarrivaltime
+    @actualdeparturetime = actualdeparturetime
+    @aircrafttype = aircrafttype
+    @destination = destination
+    @destinationCity = destinationCity
+    @destinationName = destinationName
+    @diverted = diverted
+    @estimatedarrivaltime = estimatedarrivaltime
+    @filed_airspeed_kts = filed_airspeed_kts
+    @filed_airspeed_mach = filed_airspeed_mach
+    @filed_altitude = filed_altitude
+    @filed_departuretime = filed_departuretime
+    @filed_ete = filed_ete
+    @filed_time = filed_time
+    @ident = ident
+    @origin = origin
+    @originCity = originCity
+    @originName = originName
+    @route = route
+  end
+end
+
+
+#FlightInfoEx
+class FlightInfoExRequest
+  attr_accessor :howMany, :ident, :offset
+  def initialize(howMany = nil, ident = nil, offset = nil)
+    @howMany = howMany
+    @ident = ident
+    @offset = offset
+  end 
+  def post
+    "howMany=#@howMany&ident=#@ident&offset=#@offset"
+  end
+end
+
+class FlightInfoExResults
+  attr_accessor :flightInfoExResult
+  def initialize(flightInfoExResult = nil)
+    flightInfoExResult = JSON.parse(flightInfoExResult)['FlightInfoExResult']
+    @flightInfoExResult = FlightInfoExStruct.new([], flightInfoExResult['next_offset'])
+    flightInfoExResult['flights'].each do |flight|
+      @flightInfoExResult.flights << FlightExStruct.new(flight['actualarrivaltime'],
+                                                    flight['actualdeparturetime'],
+                                                    flight['aircrafttype'],
+                                                    flight['destination'],
+                                                    flight['destinationCity'],
+                                                    flight['destinationName'],
+                                                    flight['diverted'],
+                                                    flight['estimatedarrivaltime'],
+                                                    flight['faFlightID'],
+                                                    flight['filed_airspeed_kts'],
+                                                    flight['filed_airspeed_mach'],
+                                                    flight['filed_altitude'],
+                                                    flight['filed_departuretime'],
+                                                    flight['filed_ete'],
+                                                    flight['filed_time'],
+                                                    flight['ident'],
+                                                    flight['origin'],
+                                                    flight['originCity'],
+                                                    flight['originName'],
+                                                    flight['route']
+                                                   )
+    end
+  end
+end
+
+class FlightInfoExStruct
+  attr_accessor :flights, :next_offset
+  def initialize (flights = [], next_offset = nil)
+    @flights = flights
+    @next_offset = next_offset
+  end
+end
+
+class FlightExStruct
+  attr_accessor :actualarrivaltime,
+                :actualdeparturetime,
+                :aircrafttype,
+                :destination,
+                :destinationCity,
+                :destinationName,
+                :diverted,
+                :estimatedarrivaltime,
+                :faFlightID,
+                :filed_airspeed_kts,
+                :filed_airspeed_mach,
+                :filed_altitude,
+                :filed_departuretime,
+                :filed_ete,
+                :filed_time,
+                :ident,
+                :origin,
+                :originCity,
+                :originName,
+                :route
+                
+  def initialize (actualarrivaltime = nil,
+                  actualdeparturetime = nil,
+                  aircrafttype = nil,
+                  destination = nil,
+                  destinationCity = nil,
+                  destinationName = nil,
+                  diverted = nil,
+                  estimatedarrivaltime = nil,
+                  faFlightID = nil,
+                  filed_airspeed_kts = nil,
+                  filed_airspeed_mach = nil,
+                  filed_altitude = nil,
+                  filed_departuretime = nil,
+                  filed_ete = nil,
+                  filed_time = nil,
+                  ident = nil,
+                  origin = nil,
+                  originCity = nil,
+                  originName = nil,
+                  route = nil
+                 )
+    @actualarrivaltime = actualarrivaltime
+    @actualdeparturetime = actualdeparturetime
+    @aircrafttype = aircrafttype
+    @destination = destination
+    @destinationCity = destinationCity
+    @destinationName = destinationName
+    @diverted = diverted
+    @estimatedarrivaltime = estimatedarrivaltime
+    @faFlightID = faFlightID
+    @filed_airspeed_kts = filed_airspeed_kts
+    @filed_airspeed_mach = filed_airspeed_mach
+    @filed_altitude = filed_altitude
+    @filed_departuretime = filed_departuretime
+    @filed_ete = filed_ete
+    @filed_time = filed_time
+    @ident = ident
+    @origin = origin
+    @originCity = originCity
+    @originName = originName
+    @route = route
   end
 end

@@ -10,6 +10,10 @@ test = FlightXML2REST.new(username, apiKey)
 #AircraftType
 result = test.AircraftType(AircraftTypeRequest.new('GALX'))
 pp result.aircraftTypeResult
+
+#AirlineFlightInfo
+result = test.AirlineFlightInfo(AirlineFlightInfoRequest.new("SKW6400-1379568664-airline-0376"))
+pp result.airlineFlightInfoResult
  
 #AirlineFlightSchedules
 result = test.AirlineFlightSchedules(AirlineFlightSchedulesRequest.new('UA', 'SFO', 1380153600, nil, 15, 0, 'EUG',  1380067200))
@@ -39,3 +43,36 @@ pp result.allAirportsResult
 result = test.Arrived(ArrivedRequest.new('KSFO', 15, "airline", 0))
 pp result.arrivedResult
 
+#BlockIdentCheck
+result = test.BlockIdentCheck(BlockIdentCheckRequest.new('N644AA'))
+pp result.blockIdentCheckResult
+
+#CountAirportOperations
+result = test.CountAirportOperations(CountAirportOperationsRequest.new('KSFO'))
+pp result.countAirportOperationsResult
+
+#CountEnrouteAirlineOperations
+result = test.CountAllEnrouteAirlineOperations(CountAllEnrouteAirlineOperationsRequest.new())
+pp result.countAllEnrouteAirlineOperationsResult
+
+#DecodeFlightRoute
+result = test.DecodeFlightRoute(DecodeFlightRouteRequest.new(faFlightID))
+pp result.decodeFlightRouteResult
+
+#DecodeRoute
+result = test.DecodeRoute(DecodeRouteRequest.new('KSFO','KEUG','RBG GOLDN6'))
+pp result.decodeRouteResult
+
+#DeleteAlert
+result = test.DeleteAlert(DeleteAlertRequest.new(1))
+pp result.deleteAlertResult
+
+
+
+#FlightInfo
+result = test.FlightInfo(FlightInfoRequest.new(15, 'SKW6400'))
+pp result.flightInfoResult
+
+#FlightInfoEx
+result = test.FlightInfoEx(FlightInfoExRequest.new(15, 'SKW6400', 0))
+pp result.flightInfoExResult

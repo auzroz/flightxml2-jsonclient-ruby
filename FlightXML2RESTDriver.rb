@@ -13,70 +13,73 @@ require './FlightXML2REST.rb'
     
     #Methods
     def AircraftType(aircraftTypeRequest)
-      aircraftTypeResult = AircraftTypeResults.new($api['AircraftType'].post aircraftTypeRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @aircraftTypeResult = aircraftTypeResult
+      @aircraftTypeResult = AircraftTypeResults.new($api['AircraftType'].post aircraftTypeRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
     
     def AirlineFlightInfo(airlineFlightInfoRequest)
-      airlineFlightInfoResult = AirlineFlightInfoResults.new($api['AirlineFlightInfo'].post airlineFlightInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @airlineFlightInfoResult = airlineFlightInfoResult 
+      @airlineFlightInfoResult = AirlineFlightInfoResults.new($api['AirlineFlightInfo'].post airlineFlightInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
     
     def AirlineFlightSchedules(airlineFlightSchedulesRequest)
-      airlineFlightSchedulesResult = AirlineFlightSchedulesResults.new($api['AirlineFlightSchedules'].post airlineFlightSchedulesRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @airlineFlightSchedulesResult = airlineFlightSchedulesResult
+      @airlineFlightSchedulesResult = AirlineFlightSchedulesResults.new($api['AirlineFlightSchedules'].post airlineFlightSchedulesRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
     
     def AirlineInfo(airlineInfoRequest)
-      airlineInfoResult = AirlineInfoResults.new($api['AirlineInfo'].post airlineInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @airlineInfoResult = airlineInfoResult
+      @airlineInfoResult = AirlineInfoResults.new($api['AirlineInfo'].post airlineInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
     
     def AirlineInsight(airlineInsightRequest)
-      airlineInsightResult = AirlineInsightResults.new($api['AirlineInsight'].post airlineInsightRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @airlineInsightResult = airlineInsightResult
+      @airlineInsightResult = AirlineInsightResults.new($api['AirlineInsight'].post airlineInsightRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
     
     def AirportInfo(airportInfoRequest)
-      airportInfoResult = AirportInfoResults.new($api['AirportInfo'].post airportInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @airportInfoResult = airportInfoResult
+      @airportInfoResult = AirportInfoResults.new($api['AirportInfo'].post airportInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def AllAirlines(allAirlinesRequest)
-      allAirlinesResult = AllAirlinesResults.new($api['AllAirlines'].post allAirlinesRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @allAirlinesResult = allAirlinesResult
+      @allAirlinesResult = AllAirlinesResults.new($api['AllAirlines'].post allAirlinesRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def AllAirports(allAirportsRequest)
-      allAirportsResult = AllAirportsResults.new($api['AllAirports'].post allAirportsRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @allAirportsResult = allAirportsResult
+      @allAirportsResult = AllAirportsResults.new($api['AllAirports'].post allAirportsRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def Arrived(arrivedRequest)
-      arrivedResult = ArrivedResults.new($api['Arrived'].post arrivedRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @arrivedResult = arrivedResult      
+      @arrivedResult = ArrivedResults.new($api['Arrived'].post arrivedRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def BlockIdentCheck(blockIdentCheckRequest)
-      
+      @blockIdentCheckResult = BlockIdentCheckResults.new($api['BlockIdentCheck'].post blockIdentCheckRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def CountAirportOperations(countAirportOperationsRequest)
-      
+      @countAirportOperationsResult = CountAirportOperationsResults.new($api['CountAirportOperations'].post countAirportOperationsRequest.post, :content_type => "application/x-www-form-urlencoded")
     end  
+    
     def CountAllEnrouteAirlineOperations(countAllEnrouteAirlineOperationsRequest)
-      
+      @countAllEnrouteAirlineOperationsResult = CountAllEnrouteAirlineOperationsResults.new($api['CountAllEnrouteAirlineOperations'].post countAllEnrouteAirlineOperationsRequest.post, :content_type => "application/x-www-form-urlencoded")
     end  
+    
     def DecodeFlightRoute(decodeFlightRouteRequest)
-      
+      @decodeFlightRouteResult = DecodeFlightRouteResults.new($api['DecodeFlightRoute'].post decodeFlightRouteRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def DecodeRoute(decodeRouteRequest)
-      
+      @decodeRouteResult = DecodeRouteResults.new($api['DecodeRoute'].post decodeRouteRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def DeleteAlert(deleteAlertRequest)
-      
+      @deleteAlertResult = DeleteAlertResults.new($api['DeleteAlert'].post deleteAlertRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def Departed(departedRequest)
       
     end
+    
     def Enroute(enrouteRequest)
       
     end
+    
     def FleetArrived(fleetArrivedRequest)
       
     end
@@ -84,10 +87,12 @@ require './FlightXML2REST.rb'
       
     end
     def FlightInfo(flightInfoRequest)
-      
+      flightInfoResult = FlightInfoResults.new($api['FlightInfo'].post flightInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
+      @flightInfoResult = flightInfoResult   
     end
     def FlightInfoEx(flightInfoExRequest)
-      
+      flightInfoExResult = FlightInfoExResults.new($api['FlightInfoEx'].post flightInfoExRequest.post, :content_type => "application/x-www-form-urlencoded")
+      @flightInfoExResult = flightInfoExResult        
     end
     def GetAlerts(getAlertsRequest)
       
