@@ -1152,3 +1152,143 @@ class FlightExStruct
     @route = route
   end
 end
+
+
+#GetAlerts
+class GetAlertsRequest
+  def initialize()
+  end 
+  def post
+    ""
+  end
+end
+
+class GetAlertsResults
+  attr_accessor :getAlertsResult
+  def initialize(getAlertsResult = nil)
+    getAlertsResult = JSON.parse(getAlertsResult)['GetAlertsResult']
+    @getAlertsResult = FlightAlertListing.new([], getAlertsResult['next_offset'])
+    getAlertsResult['alerts'].each do |alert|
+      myAlert = FlightAlertEntry.new(alert['aircrafttype'],
+                                     alert['alert_changed'],
+                                     alert['alert_created'],
+                                     alert['alert_id'],
+                                     [],
+                                     alert['date_end'],
+                                     alert['date_start'],
+                                     alert['description'],
+                                     alert['destination'],
+                                     alert['enabled'],
+                                     alert['ident'],
+                                     alert['origin'],
+                                     alert['type'],
+                                     alert['user_ident'],
+                                    )
+      alert['channels'].each do |channel|
+        myAlert.channels << FlightAlertChannel.new(channel['channel_id'],
+                                          channel['channel_name'],
+                                          channel['e_arrival'],
+                                          channel['e_cancelled'],
+                                          channel['e_departure'],
+                                          channel['e_diverted'],
+                                          channel['e_filed'],
+                                          channel['mask_summary'],
+                                          channel['target_address'],
+                                         )
+      end
+      @getAlertsResult.alerts << myAlert
+    end
+  end
+end
+
+class FlightAlertListing
+  attr_accessor :alerts, :num_alerts
+  def initialize (alerts = [], num_alerts = nil)
+    @alerts = alerts
+    @num_alerts = num_alerts
+  end
+end
+
+class FlightAlertEntry
+  attr_accessor :aircrafttype,
+                :alert_changed,
+                :alert_created,
+                :alert_id,
+                :channels,
+                :date_end,
+                :date_start,
+                :description,
+                :destination,
+                :enabled,
+                :ident,
+                :origin,
+                :type,
+                :user_ident
+                
+  def initialize (aircrafttype = nil,
+                  alert_changed = nil,
+                  alert_created = nil,
+                  alert_id = nil,
+                  channels = [],
+                  date_end = nil,
+                  date_start = nil,
+                  description = nil,
+                  destination = nil,
+                  enabled = nil,
+                  ident = nil,
+                  origin = nil,
+                  type = nil,
+                  user_ident = nil
+                 )
+    @aircrafttype = aircrafttype
+    @alert_changed = alert_changed
+    @alert_created = alert_created
+    @alert_id = alert_id
+    @channels = channels
+    @date_end = date_end
+    @date_start = date_start
+    @description = description
+    @destination = destination
+    @enabled = enabled
+    @ident = ident
+    @origin = origin
+    @type = type
+    @user_ident = user_ident
+  end
+end
+
+class FlightAlertChannel
+  attr_accessor :channel_id, :channel_name, :e_arrival, :e_cancelled, :e_departure, :e_diverted, :e_filed, :mask_summary, :target_address
+  def initialize(channel_id = nil, channel_name = nil, e_arrival = nil, e_cancelled = nil, e_departure = nil, e_diverted = nil, e_filed = nil, mask_summary = nil, target_address = nil)
+    @channel_id = channel_id
+    @channel_name = channel_name
+    @e_arrival = e_arrival
+    @e_cancelled = e_cancelled
+    @e_departure = e_departure
+    @e_diverted = e_diverted
+    @e_filed = e_filed
+    @mask_summary = mask_summary
+    @target_address = target_address
+  end
+end
+
+
+#GetFlightID
+class GetFlightIDRequest
+  attr_accessor :departureTime, :ident 
+  def initialize(departureTime = nil, ident = nil)
+    @departureTime = departureTime
+    @ident = ident
+  end 
+  def post
+    "departureTime=#@departureTime&ident=#@ident"
+  end
+end
+
+class GetFlightIDResults
+  attr_accessor :getFlightIDResult
+  def initialize(getFlightIDResult = nil)
+    getFlightIDResult = JSON.parse(getFlightIDResult)['GetFlightIDResult']
+    @getFlightIDResult = getFlightIDResult
+  end
+end

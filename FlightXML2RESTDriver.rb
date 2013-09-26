@@ -89,89 +89,91 @@ require './FlightXML2REST.rb'
     end
     
     def FlightInfo(flightInfoRequest)
-      flightInfoResult = FlightInfoResults.new($api['FlightInfo'].post flightInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @flightInfoResult = flightInfoResult   
+      @flightInfoResult = FlightInfoResults.new($api['FlightInfo'].post flightInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def FlightInfoEx(flightInfoExRequest)
-      flightInfoExResult = FlightInfoExResults.new($api['FlightInfoEx'].post flightInfoExRequest.post, :content_type => "application/x-www-form-urlencoded")
-      @flightInfoExResult = flightInfoExResult        
+      @flightInfoExResult = FlightInfoExResults.new($api['FlightInfoEx'].post flightInfoExRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def GetAlerts(getAlertsRequest)
-      
+      @getAlertsResult = GetAlertsResults.new($api['GetAlerts'].post getAlertsRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def GetFlightID(getFlightIDRequest)
-      
+      @getFlightIDResult = GetFlightIDResults.new($api['GetFlightID'].post getFlightIDRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def GetHistoricalTrack(getHistoricalTrackRequest)
-      
+      #TODO GetHistoricalTrack
     end
     def GetLastTrack(getLasTrackRequest)
-      
+      #TODO GetLastTrack
     end
     def InboundFlightInfo(inboundFlightInfoRequest)
-      
+      #TODO InboundFlightInfo
     end
     def InFlightInfo(inFlightInfoRequest)
-      
+      #TODO InFlightInfo
     end
     def LatLongsToDistance(latLongsToDistanceRequest)
-      
+      #TODO LatLongsToDistance
     end
     def LatLongsToHeading(latLongsToHeadingRequest)
-      
+      #TODO LatLongsToHeading
     end
     def MapFlight(mapFlightRequest)
-      
+      #TODO MapFlight
     end
     def MapFlightEx(mapFlightExRequest)
-      
+      #TODO MapFlightEx
     end
     def Metar(metarRequest)
-      
+      #TODO Metar
     end
     def MetarEx(metarExRequest)
-      
+      #TODO MetarEx
     end
     def NTaf(nTafRequest)
-      
+      #TODO NTaf
     end
     def RegisterAlertEndpoint(registerAlertEndpoingRequest)
-      
+      #TODO RegisterAlertEndpoint
     end
     def RoutesBetweenAirports(routesBetweenAirportsRequest)
-      
+      #TODO RoutesBetweenAirports
     end
     def RoutesBetweenAirportsEx(routesBetweenAirportsExRequest)
-      
+      #TODO RoutesBetweenAirportsEx
     end
     def Scheduled(scheduledRequest)
-      
+      #TODO Scheduled
     end
     def Search(searchRequest)
-      
+      #TODO Search
     end
     def SearchBirdseyeInFlight(searchBirdseyeInFlightRequest)
-      
+      #TODO SearchBirdseyeInFlight
     end
     def SearchBirdseyePositions(searchBirdseyePositionsRequest)
-      
+      #TODO SearchBirdseyePositions
     end
     def SearchCount(searchCountRequest)
-      
+      #TODO SearchCount
     end
     def SetAlert(setAlertRequest)
-      
+      #TODO SetAlert
     end
     def SetMaximumResultSize(setMaximumResultSizeRequest)
-      
+      #TODO SetMaximumResultSize
     end
     def Taf(tafRequest)
-      
+      #TODO Taf
     end
     def TailOwner(tailOwnerRequest)
-      
+      #TODO TailOwner
     end
     def ZipcodeInfo(zipCodeInfoRequest)
-      
+      #TODO ZipcodeInfo
     end
   end

@@ -90,3 +90,11 @@ pp result.flightInfoResult
 #FlightInfoEx
 result = test.FlightInfoEx(FlightInfoExRequest.new(15, 'SKW6400', 0))
 pp result.flightInfoExResult
+
+#GetAlerts
+result = test.GetAlerts(GetAlertsRequest.new())
+pp result.getAlertsResult
+
+#GetFlightID
+result = test.GetFlightID(GetFlightIDRequest.new(1379123880, 'SKW5300'))
+pp result.getFlightIDResult
