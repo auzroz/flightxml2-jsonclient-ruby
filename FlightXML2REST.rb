@@ -1433,3 +1433,387 @@ class InboundFlightInfoResults
                                                  )
   end
 end
+
+
+#InFlightInfo
+class InFlightInfoRequest
+  attr_accessor :ident
+  def initialize(ident = nil)
+    @ident = ident
+  end 
+  def post
+    "ident=#@ident"
+  end
+end
+
+class InFlightInfoResults
+  attr_accessor :inFlightInfoResult
+  def initialize(inFlightInfoResult = nil)
+    inFlightInfoResult = JSON.parse(inFlightInfoResult)['InFlightInfoResult']
+    @inFlightInfoResult = InFlightAircraftStruct.new(inFlightInfoResult['altitude'],
+                                                     inFlightInfoResult['altitudeChange'],
+                                                     inFlightInfoResult['altitudeStatus'],
+                                                     inFlightInfoResult['departureTime'],
+                                                     inFlightInfoResult['destination'],
+                                                     inFlightInfoResult['faFlightID'],
+                                                     inFlightInfoResult['firstPositionTime'],
+                                                     inFlightInfoResult['groundspeed'],
+                                                     inFlightInfoResult['heading'],
+                                                     inFlightInfoResult['highLatitude'],
+                                                     inFlightInfoResult['highLongitude'],
+                                                     inFlightInfoResult['ident'],
+                                                     inFlightInfoResult['latitude'],
+                                                     inFlightInfoResult['longitude'],
+                                                     inFlightInfoResult['lowLatitude'],
+                                                     inFlightInfoResult['lowLongitude'],
+                                                     inFlightInfoResult['origin'],
+                                                     inFlightInfoResult['prefix'],
+                                                     inFlightInfoResult['suffix'],
+                                                     inFlightInfoResult['timeout'],
+                                                     inFlightInfoResult['timestamp'],
+                                                     inFlightInfoResult['type'],
+                                                     inFlightInfoResult['updateType'],
+                                                     inFlightInfoResult['waypoints']
+                                                    )
+
+  end
+end
+
+class InFlightAircraftStruct
+  attr_accessor :altitude,
+                :altitudeChange,
+                :altitudeStatus,
+                :departureTime,
+                :destination,
+                :faFlightID,
+                :firstPositionTime,
+                :groundspeed,
+                :heading,
+                :highLatitude,
+                :highLongitude,
+                :ident,
+                :latitude,
+                :longitude,
+                :lowLatitude,
+                :lowLongitude,
+                :origin,
+                :prefix,
+                :suffix,
+                :timeout,
+                :timestamp,
+                :type,
+                :updateType,
+                :waypoints
+                
+  def initialize (altitude = nil,
+                  altitudeChange = nil,
+                  altitudeStatus = nil,
+                  departureTime = nil,
+                  destination = nil,
+                  faFlightID = nil,
+                  firstPositionTime = nil,
+                  groundspeed = nil,
+                  heading = nil,
+                  highLatitude = nil,
+                  highLongitude = nil,
+                  ident = nil,
+                  latitude = nil,
+                  longitude = nil,
+                  lowLatitude = nil,
+                  lowLongitude = nil,
+                  origin = nil,
+                  prefix = nil,
+                  suffix = nil,
+                  timeout = nil,
+                  timestamp = nil,
+                  type = nil,
+                  updateType = nil,
+                  waypoints = nil
+                 )
+    @altitude = altitude
+    @altitudeChange = altitudeChange
+    @altitudeStatus = altitudeStatus
+    @departureTime = departureTime
+    @destination = destination
+    @faFlightID = faFlightID
+    @firstPositionTime = firstPositionTime
+    @groundspeed = groundspeed
+    @heading = heading
+    @highLatitude = highLatitude
+    @highLongitude = highLongitude
+    @ident = ident
+    @latitude = latitude
+    @longitude = longitude
+    @lowLatitude = lowLatitude
+    @lowLongitude = lowLongitude
+    @origin = origin
+    @prefix = prefix
+    @suffix = suffix
+    @timeout = timeout
+    @timestamp = timestamp
+    @type = type
+    @updateType = updateType
+    @waypoints = waypoints
+  end
+end
+
+
+#LatLongsToDistance
+class LatLongsToDistanceRequest
+  attr_accessor :lat1, :lat2, :lon1, :lon2
+  def initialize(lat1 = nil, lat2 = nil, lon1 = nil, lon2 = nil)
+    @lat1 = lat1
+    @lat2 = lat2
+    @lon1 = lon1
+    @lon2 = lon2
+  end 
+  def post
+    "lat1=#@lat1&lat2=#@lat2&lon1=#@lon1&lon2=#@lon2"
+  end
+end
+
+class LatLongsToDistanceResults
+  attr_accessor :latLongsToDistanceResult
+  def initialize(latLongsToDistanceResult = nil)
+    latLongsToDistanceResult = JSON.parse(latLongsToDistanceResult)['LatLongsToDistanceResult']
+    @latLongsToDistanceResult = latLongsToDistanceResult
+  end
+end
+
+
+#LatLongsToHeading
+class LatLongsToHeadingRequest
+  attr_accessor :lat1, :lat2, :lon1, :lon2
+  def initialize(lat1 = nil, lat2 = nil, lon1 = nil, lon2 = nil)
+    @lat1 = lat1
+    @lat2 = lat2
+    @lon1 = lon1
+    @lon2 = lon2
+  end 
+  def post
+    "lat1=#@lat1&lat2=#@lat2&lon1=#@lon1&lon2=#@lon2"
+  end
+end
+
+class LatLongsToHeadingResults
+  attr_accessor :latLongsToHeadingResult
+  def initialize(latLongsToHeadingResult = nil)
+    latLongsToHeadingResult = JSON.parse(latLongsToHeadingResult)['LatLongsToHeadingResult']
+    @latLongsToHeadingResult = latLongsToHeadingResult
+  end
+end
+
+
+#MapFlight
+class MapFlightRequest
+  attr_accessor :ident, :mapHeight, :mapWidth
+  def initialize(ident = nil, mapHeight = nil, mapWidth = nil)
+    @ident = ident
+    @mapHeight = mapHeight
+    @mapWidth = mapWidth
+  end 
+  def post
+    "ident=#@ident&mapHeight=#@mapHeight&mapWidth=#@mapWidth"
+  end
+end
+
+class MapFlightResults
+  attr_accessor :mapFlightResult
+  def initialize(mapFlightResult = nil)
+    mapFlightResult = JSON.parse(mapFlightResult)['MapFlightResult']
+    @mapFlightResult = mapFlightResult
+  end
+end
+
+
+#MapFlightEx
+class MapFlightExRequest
+  attr_accessor :airports_expand_view, 
+                :faFlightID, 
+                :latlon_box, 
+                :layer_off, 
+                :layer_on, 
+                :mapHeight, 
+                :mapWidth, 
+                :show_airports, 
+                :show_data_blocks
+                
+  def initialize(airports_expand_view = nil, 
+                 faFlightID = nil, 
+                 latlon_box = [], 
+                 layer_off = [], 
+                 layer_on = [], 
+                 mapHeight = nil, 
+                 mapWidth = nil, 
+                 show_airports = nil, 
+                 show_data_blocks = nil)
+    @airports_expand_view = airports_expand_view
+    @faFlightID = faFlightID
+    @latlon_box = latlon_box
+    @layer_off = layer_off
+    @layer_on = layer_on
+    @mapHeight = mapHeight
+    @mapWidth = mapWidth
+    @show_airports = show_airports
+    @show_data_blocks = show_data_blocks
+  end 
+  def post
+    #TODO Clean this up when the Rest-Client properly handles arrays
+    latlon_box = ""
+    @latlon_box.each { |v| latlon_box = latlon_box + "latlon_box=" + v.to_s + "&" }
+    @latlon_box = latlon_box
+    puts @latlon_box
+    
+    layer_on = ""
+    @layer_on.each { |v| layer_on = layer_on + "layer_on=" + v.to_s + "&" }
+    @layer_on = layer_on
+    puts @layer_on
+    
+    layer_off = ""
+    @layer_off.each { |v| layer_off = layer_off + "layer_off=" + v.to_s + "&" }
+    @layer_off = layer_off
+    puts @layer_off
+    
+    output = "airports_expand_view=#@airports_expand_view&faFlightID=#@faFlightID&#{@latlon_box}#{@layer_off}#{@layer_on}" +
+    "mapHeight=#@mapHeight&mapWidth=#@mapWidth&show_airports=#@show_airports&show_data_blocks=#@show_data_blocks"
+    puts output
+    output
+  end
+end
+
+class MapFlightExResults
+  attr_accessor :mapFlightExResult
+  def initialize(mapFlightExResult = nil)
+    puts mapFlightExResult
+    mapFlightExResult = JSON.parse(mapFlightExResult)['MapFlightExResult']
+    @mapFlightExResult = mapFlightExResult
+  end
+end
+
+
+#Metar
+class MetarRequest
+  attr_accessor :airport
+  def initialize(airport = nil)
+    @airport = airport
+  end 
+  def post
+    "airport=#@airport"
+  end
+end
+
+class MetarResults
+  attr_accessor :metarResult
+  def initialize(metarResult = nil)
+    metarResult = JSON.parse(metarResult)['MetarResult']
+    @metarResult = metarResult
+  end
+end
+
+
+#MetarEx
+class MetarExRequest
+  attr_accessor :airport, :startTime, :howMany, :offset
+  def initialize(airport = nil, startTime = nil, howMany = nil, offset = nil)
+    @airport = airport
+    @startTime = startTime
+    @howMany = howMany
+    @offset = offset
+  end 
+  def post
+    "airport=#@airport&startTime=#@startTime&howMany=#@howMany&offset=#@offset"
+  end
+end
+
+class MetarExResults
+  attr_accessor :metarExResult
+  def initialize(metarExResult = nil)
+    puts metarExResult
+    metarExResult = JSON.parse(metarExResult)['MetarExResult']
+    @metarExResult = ArrayOfMetarStruct.new([], metarExResult['next_offset'])
+    metarExResult['metar'].each do |metar|
+      puts metar
+      @metarExResult.metar << MetarStruct.new(metar['airport'],
+                                              metar['cloud_altitude'],
+                                              metar['cloud_friendly'],
+                                              metar['cloud_type'],
+                                              metar['conditions'],
+                                              metar['pressure'],
+                                              metar['raw_data'],
+                                              metar['temp_air'],
+                                              metar['temp_dewpoint'],
+                                              metar['temp_relhum'],
+                                              metar['time'],
+                                              metar['visibility'],
+                                              metar['wind_direction'],
+                                              metar['wind_friendly'],
+                                              metar['wind_speed'],
+                                              metar['wind_speed_gust']
+                                             )
+
+    end
+  end
+end
+
+class ArrayOfMetarStruct
+  attr_accessor :metar, :next_offset
+  def initialize(metar = [], next_offset = nil)
+    @metar = metar
+    @next_offset = next_offset
+  end
+end
+
+
+class MetarStruct
+  attr_accessor :airport,
+                :cloud_altitude,
+                :cloud_friendly,
+                :cloud_type,
+                :conditions,
+                :pressure,
+                :raw_data,
+                :temp_air,
+                :temp_dewpoint,
+                :temp_relhum,
+                :time,
+                :visibility,
+                :wind_direction,
+                :wind_friendly,
+                :wind_speed,
+                :wind_speed_gust
+
+  def initialize(airport = nil,
+                 cloud_altitude = nil,
+                 cloud_friendly = nil,
+                 cloud_type = nil,
+                 conditions = nil,
+                 pressure = nil,
+                 raw_data = nil,
+                 temp_air = nil,
+                 temp_dewpoint = nil,
+                 temp_relhum = nil,
+                 time = nil,
+                 visibility = nil,
+                 wind_direction = nil,
+                 wind_friendly = nil,
+                 wind_speed = nil,
+                 wind_speed_gust = nil
+                )
+    @airport = airport
+    @cloud_altitude = cloud_altitude
+    @cloud_friendly = cloud_friendly
+    @cloud_type = cloud_type
+    @conditions = conditions
+    @pressure = pressure
+    @raw_data = raw_data
+    @temp_air = temp_air
+    @temp_dewpoint = temp_dewpoint
+    @temp_relhum = temp_relhum
+    @time = time
+    @visibility = visibility
+    @wind_direction = wind_direction
+    @wind_friendly = wind_friendly
+    @wind_speed = wind_speed
+    @wind_speed_gust = wind_speed_gust
+  end
+end

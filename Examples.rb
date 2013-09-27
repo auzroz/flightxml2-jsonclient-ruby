@@ -110,3 +110,33 @@ pp result.getLastTrackResult
 #InboundFlightInfo
 result = test.InboundFlightInfo(InboundFlightInfoRequest.new(faFlightID))
 pp result.inboundFlightInfoResult
+
+#InFlightInfo
+result = test.InFlightInfo(InFlightInfoRequest.new("ASA244"))
+pp result.inFlightInfoResult
+
+#LatLongsToDistance
+result = test.LatLongsToDistance(LatLongsToDistanceRequest.new(45.583333333333336, 45.56666666666667, -122.58333333333333, -122.46666666666667))
+pp result.latLongsToDistanceResult
+
+#LatLongsToHeading
+result = test.LatLongsToHeading(LatLongsToHeadingRequest.new(45.583333333333336, 45.56666666666667, -122.58333333333333, -122.46666666666667))
+pp result.latLongsToHeadingResult
+
+#MapFlight
+#TODO Tested, but received blank image
+result = test.MapFlight(MapFlightRequest.new("UAL991", 200, 400))
+pp result.mapFlightResult
+
+#MapFlight
+#TODO Tested, but received blank image
+result = test.MapFlightEx(MapFlightExRequest.new(0, "SKW6400-1379568664-airline-0376", [0,0,45,45], ["US state boundaries"], ["US urban areas", "US Cities"], 480, 640, 1, 1))
+pp result.mapFlightExResult
+
+#Metar
+result = test.Metar(MetarRequest.new('KSFO'))
+pp result.metarResult
+
+#MetarEx
+result = test.MetarEx(MetarExRequest.new('KSFO', 0, 15, 0))
+pp result.metarExResult
