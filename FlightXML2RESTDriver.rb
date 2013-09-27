@@ -105,13 +105,15 @@ require './FlightXML2REST.rb'
     end
     
     def GetHistoricalTrack(getHistoricalTrackRequest)
-      #TODO GetHistoricalTrack
+      @getHistoricalTrackResult = GetHistoricalTrackResults.new($api['GetHistoricalTrack'].post getHistoricalTrackRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
-    def GetLastTrack(getLasTrackRequest)
-      #TODO GetLastTrack
+    
+    def GetLastTrack(getLastTrackRequest)
+      @getLastTrackResult = GetLastTrackResults.new($api['GetLastTrack'].post getLastTrackRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
+    
     def InboundFlightInfo(inboundFlightInfoRequest)
-      #TODO InboundFlightInfo
+      @inboundFlightInfoResult = InboundFlightInfoResults.new($api['InboundFlightInfo'].post inboundFlightInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
     end
     def InFlightInfo(inFlightInfoRequest)
       #TODO InFlightInfo

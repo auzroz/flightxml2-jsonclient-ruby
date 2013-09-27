@@ -1182,7 +1182,7 @@ class GetAlertsResults
                                      alert['ident'],
                                      alert['origin'],
                                      alert['type'],
-                                     alert['user_ident'],
+                                     alert['user_ident']
                                     )
       alert['channels'].each do |channel|
         myAlert.channels << FlightAlertChannel.new(channel['channel_id'],
@@ -1193,7 +1193,7 @@ class GetAlertsResults
                                           channel['e_diverted'],
                                           channel['e_filed'],
                                           channel['mask_summary'],
-                                          channel['target_address'],
+                                          channel['target_address']
                                          )
       end
       @getAlertsResult.alerts << myAlert
@@ -1290,5 +1290,146 @@ class GetFlightIDResults
   def initialize(getFlightIDResult = nil)
     getFlightIDResult = JSON.parse(getFlightIDResult)['GetFlightIDResult']
     @getFlightIDResult = getFlightIDResult
+  end
+end
+
+
+#GetHistoricalTrack
+class GetHistoricalTrackRequest
+  attr_accessor :faFlightID
+  def initialize(faFlightID = nil)
+    @faFlightID = faFlightID
+  end 
+  def post
+    "faFlightID=#@faFlightID"
+  end
+end
+
+class GetHistoricalTrackResults
+  attr_accessor :getHistoricalTrackResult
+  def initialize(getHistoricalTrackResult = nil)
+    getHistoricalTrackResult = JSON.parse(getHistoricalTrackResult)['GetHistoricalTrackResult']
+    @getHistoricalTrackResult = ArrayOfTrackStruct.new()
+    getHistoricalTrackResult['data'].each do |data|
+      @getHistoricalTrackResult.data << TrackStruct.new(data['altitude'],
+                                     data['altitudeChange'],
+                                     data['altitudeStatus'],
+                                     data['groundsped'],
+                                     data['latitude'],
+                                     data['longitude'],
+                                     data['timestamp'],
+                                     data['updateType']
+                                    )
+
+    end
+  end
+end
+
+class ArrayOfTrackStruct
+  attr_accessor :data
+  def initialize (data = [])
+    @data = data
+  end
+end
+
+class TrackStruct
+  attr_accessor :altitude,
+                :altitudeChange,
+                :altitudeStatus,
+                :groundspeed,
+                :latitude,
+                :longitude,
+                :timestamp,
+                :updateType
+                
+  def initialize (altitude = nil,
+                  altitudeChange = nil,
+                  altitudeStatus = nil,
+                  groundspeed = nil,
+                  latitude = nil,
+                  longitude = nil,
+                  timestamp = nil,
+                  updateType = nil
+                 )
+    @altitude = altitude
+    @altitudeChange = altitudeChange
+    @altitudeStatus = altitudeStatus
+    @groundspeed = groundspeed
+    @latitude = latitude
+    @longitude = longitude
+    @timestamp = timestamp
+    @updateType = updateType
+  end
+end
+
+
+#GetLastTrack
+class GetLastTrackRequest
+  attr_accessor :ident
+  def initialize(ident = nil)
+    @ident = ident
+  end 
+  def post
+    "ident=#@ident"
+  end
+end
+
+class GetLastTrackResults
+  attr_accessor :getLastTrackResult
+  def initialize(getLastTrackResult = nil)
+    getLastTrackResult = JSON.parse(getLastTrackResult)['GetLastTrackResult']
+    @getLastTrackResult = ArrayOfTrackStruct.new()
+    getLastTrackResult['data'].each do |data|
+      @getLastTrackResult.data << TrackStruct.new(data['altitude'],
+                                     data['altitudeChange'],
+                                     data['altitudeStatus'],
+                                     data['groundsped'],
+                                     data['latitude'],
+                                     data['longitude'],
+                                     data['timestamp'],
+                                     data['updateType']
+                                    )
+
+    end
+  end
+end
+
+
+#InboundFlightInfo
+class InboundFlightInfoRequest
+  attr_accessor :faFlightID
+  def initialize(faFlightID = nil)
+    @faFlightID = faFlightID
+  end 
+  def post
+    "faFlightID=#@faFlightID"
+  end
+end
+
+class InboundFlightInfoResults
+  attr_accessor :inboundFlightInfoResult
+  def initialize(inboundFlightInfoResult = nil)
+    inboundFlightInfoResult = JSON.parse(inboundFlightInfoResult)['InboundFlightInfoResult']
+    @inboundFlightInfoResult = FlightExStruct.new(inboundFlightInfoResult['actualarrivaltime'],
+                                                  inboundFlightInfoResult['actualdeparturetime'],
+                                                  inboundFlightInfoResult['aircrafttype'],
+                                                  inboundFlightInfoResult['destination'],
+                                                  inboundFlightInfoResult['destinationCity'],
+                                                  inboundFlightInfoResult['destinationName'],
+                                                  inboundFlightInfoResult['diverted'],
+                                                  inboundFlightInfoResult['estimatedarrivaltime'],
+                                                  inboundFlightInfoResult['faFlightID'],
+                                                  inboundFlightInfoResult['filed_airspeed_kts'],
+                                                  inboundFlightInfoResult['filed_airspeed_mach'],
+                                                  inboundFlightInfoResult['filed_altitude'],
+                                                  inboundFlightInfoResult['filed_departuretime'],
+                                                  inboundFlightInfoResult['filed_ete'],
+                                                  inboundFlightInfoResult['filed_time'],
+                                                  inboundFlightInfoResult['ident'],
+                                                  inboundFlightInfoResult['origin'],
+                                                  inboundFlightInfoResult['originCity'],
+                                                  inboundFlightInfoResult['originName'],
+                                                  inboundFlightInfoResult['route']
+                                                 )
   end
 end

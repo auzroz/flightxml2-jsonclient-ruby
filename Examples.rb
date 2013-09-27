@@ -98,3 +98,15 @@ pp result.getAlertsResult
 #GetFlightID
 result = test.GetFlightID(GetFlightIDRequest.new(1379123880, 'SKW5300'))
 pp result.getFlightIDResult
+
+#GetHistoricalTrack
+result = test.GetHistoricalTrack(GetHistoricalTrackRequest.new("SKW6400-1379568664-airline-0376"))
+pp result.getHistoricalTrackResult
+
+#GetLastTrack
+result = test.GetLastTrack(GetLastTrackRequest.new("SWA5300"))
+pp result.getLastTrackResult
+
+#InboundFlightInfo
+result = test.InboundFlightInfo(InboundFlightInfoRequest.new(faFlightID))
+pp result.inboundFlightInfoResult
