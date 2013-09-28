@@ -128,7 +128,7 @@ pp result.latLongsToHeadingResult
 result = test.MapFlight(MapFlightRequest.new("UAL991", 200, 400))
 pp result.mapFlightResult
 
-#MapFlight
+#MapFlightEx
 #TODO Tested, but received blank image
 result = test.MapFlightEx(MapFlightExRequest.new(0, "SKW6400-1379568664-airline-0376", [0,0,45,45], ["US state boundaries"], ["US urban areas", "US Cities"], 480, 640, 1, 1))
 pp result.mapFlightExResult
@@ -140,3 +140,66 @@ pp result.metarResult
 #MetarEx
 result = test.MetarEx(MetarExRequest.new('KSFO', 0, 15, 0))
 pp result.metarExResult
+
+#NTaf
+result = test.NTaf(NTafRequest.new('KSFO'))
+pp result.nTafResult
+
+#RegisterAlertEndpoint
+result = test.RegisterAlertEndpoint(RegisterAlertEndpointRequest.new("http://www.acme.net/push"))
+pp result.registerAlertEndpointResult
+
+#RoutesBetweenAirports
+result = test.RoutesBetweenAirports(RoutesBetweenAirportsRequest.new('KSFO', 'KEUG'))
+pp result.routesBetweenAirportsResult
+
+#RoutesBetweenAirportsEx
+result = test.RoutesBetweenAirportsEx(RoutesBetweenAirportsExRequest.new('KSFO', 15, '3 days', '6 days' ,0 , 'KEUG'))
+pp result.routesBetweenAirportsExResult
+
+#Scheduled
+result = test.Scheduled(ScheduledRequest.new('KSFO', 15, "airline", 0))
+pp result.scheduledResult
+
+#Search
+result = test.Search(SearchRequest.new(15, 0, '-type B77*'))
+pp result.searchResult
+
+#SearchBirdseyeInFlight
+result = test.SearchBirdseyeInFlight(SearchBirdseyeInFlightRequest.new(15, 0, '{match aircraftType B77*}'))
+pp result.searchBirdseyeInFlightResult
+
+#SearchBirdseyePositions
+result = test.SearchBirdseyePositions(SearchBirdseyePositionsRequest.new(15, 0, '{match fp ASA*}', 0))
+pp result.searchBirdseyePositionsResult
+
+#SearchCount
+result = test.SearchCount(SearchCountRequest.new('-type B77*'))
+pp result.searchCountResult
+
+#SetAlert
+alert = SetAlertRequest.new()
+alert.alert_id = 0
+alert.ident = "AWE652"
+alert.channels = "{16 e_filed e_departure e_arrival e_diverted e_cancelled}"
+alert.date_start = alert.date_end = 1380326400
+alert.enabled = true
+alert.max_weekly = 1000
+result = test.SetAlert(alert)
+pp result.setAlertResult
+
+#SetMaximumResultSize
+result = test.SetMaximumResultSize(SetMaximumResultSizeRequest.new(15))
+pp result.setMaximumResultSizeResult
+
+#Taf
+result = test.Taf(TafRequest.new('KSMF'))
+pp result.tafResult
+
+#TailOwner
+result = test.TailOwner(TailOwnerRequest.new("SKW5463"))
+pp result.tailOwnerResult
+
+#ZipcodeInfo
+result = test.ZipcodeInfo(ZipcodeInfoRequest.new('90210'))
+pp result.zipcodeInfoResult

@@ -606,7 +606,6 @@ end
 class DecodeRouteResults
   attr_accessor :decodeRouteResult
   def initialize(decodeRouteResult = nil)
-    puts decodeRouteResult
     decodeRouteResult = JSON.parse(decodeRouteResult)['DecodeRouteResult']
     @decodeRouteResult  = ArrayOfFlightRouteStruct.new([],decodeRouteResult['next_offset'])
     decodeRouteResult['data'].each do |data|
@@ -1662,21 +1661,17 @@ class MapFlightExRequest
     latlon_box = ""
     @latlon_box.each { |v| latlon_box = latlon_box + "latlon_box=" + v.to_s + "&" }
     @latlon_box = latlon_box
-    puts @latlon_box
     
     layer_on = ""
     @layer_on.each { |v| layer_on = layer_on + "layer_on=" + v.to_s + "&" }
     @layer_on = layer_on
-    puts @layer_on
     
     layer_off = ""
     @layer_off.each { |v| layer_off = layer_off + "layer_off=" + v.to_s + "&" }
     @layer_off = layer_off
-    puts @layer_off
     
     output = "airports_expand_view=#@airports_expand_view&faFlightID=#@faFlightID&#{@latlon_box}#{@layer_off}#{@layer_on}" +
     "mapHeight=#@mapHeight&mapWidth=#@mapWidth&show_airports=#@show_airports&show_data_blocks=#@show_data_blocks"
-    puts output
     output
   end
 end
@@ -1684,7 +1679,6 @@ end
 class MapFlightExResults
   attr_accessor :mapFlightExResult
   def initialize(mapFlightExResult = nil)
-    puts mapFlightExResult
     mapFlightExResult = JSON.parse(mapFlightExResult)['MapFlightExResult']
     @mapFlightExResult = mapFlightExResult
   end
@@ -1728,11 +1722,9 @@ end
 class MetarExResults
   attr_accessor :metarExResult
   def initialize(metarExResult = nil)
-    puts metarExResult
     metarExResult = JSON.parse(metarExResult)['MetarExResult']
     @metarExResult = ArrayOfMetarStruct.new([], metarExResult['next_offset'])
     metarExResult['metar'].each do |metar|
-      puts metar
       @metarExResult.metar << MetarStruct.new(metar['airport'],
                                               metar['cloud_altitude'],
                                               metar['cloud_friendly'],
@@ -1815,5 +1807,599 @@ class MetarStruct
     @wind_friendly = wind_friendly
     @wind_speed = wind_speed
     @wind_speed_gust = wind_speed_gust
+  end
+end
+
+
+#NTaf
+class NTafRequest
+  attr_accessor :airport
+  def initialize(airport = nil)
+    @airport = airport
+  end 
+  def post
+    "airport=#@airport"
+  end
+end
+
+class NTafResults
+  attr_accessor :nTafResult
+  def initialize(nTafResult = nil)
+    nTafResult = JSON.parse(nTafResult)['NTafResult']
+    @nTafResult = TafStruct.new(nTafResult['airport'],
+                                nTafResult['forecast'].each { |v| v},
+                                nTafResult['timeString']
+                               )
+  end
+end
+
+class TafStruct
+  attr_accessor :airport, :forecast, :timeString
+  def initialize(airport = nil, forecast = [], timeString = nil)
+    @airport = airport
+    @forecast = forecast
+    @timeString = timeString
+  end
+end
+
+
+#RegisterAlertEndpoint
+class RegisterAlertEndpointRequest
+  attr_accessor :address, :format_type
+  def initialize(address = nil, format_type = "json/post")
+    @address = address
+    @format_type = format_type
+  end 
+  def post
+    "address=#@address&format_type=#@format_type"
+  end
+end
+
+class RegisterAlertEndpointResults
+  attr_accessor :registerAlertEndpointResult
+  def initialize(registerAlertEndpointResult = nil)
+    registerAlertEndpointResult = JSON.parse(registerAlertEndpointResult)['RegisterAlertEndpointResult']
+    @registerAlertEndpointResult = registerAlertEndpointResult
+  end
+end
+
+
+#RoutesBetweenAirports
+class RoutesBetweenAirportsRequest
+  attr_accessor :destination, :origin
+  def initialize(destination = nil, origin = nil)
+    @destination = destination
+    @origin = origin
+  end 
+  def post
+    "destination=#@destination&origin=#@origin"
+  end
+end
+
+class RoutesBetweenAirportsResults
+  attr_accessor :routesBetweenAirportsResult
+  def initialize(routesBetweenAirportsResult = nil)
+    routesBetweenAirportsResult = JSON.parse(routesBetweenAirportsResult)['RoutesBetweenAirportsResult']
+    @routesBetweenAirportsResult = ArrayOfRoutesBetweenAirportsStruct.new()
+    routesBetweenAirportsResult['data'].each do |route|
+      @routesBetweenAirportsResult.data << RoutesBetweenAirportsStruct.new(route['count'],
+                                                                            route['filedAltitude'],
+                                                                            route['route']
+                                                                           )
+
+    end
+  end
+end
+
+class ArrayOfRoutesBetweenAirportsStruct
+  attr_accessor :data
+  def initialize(data = [])
+    @data = data
+  end
+end
+
+
+class RoutesBetweenAirportsStruct
+  attr_accessor :count, :filedAltitude, :route
+  def initialize(count = nil, filedAltitude = nil, route = nil)
+    @count = count
+    @filedAltitude = filedAltitude
+    @route = route
+  end
+end
+
+
+#RoutesBetweenAirportsEx
+class RoutesBetweenAirportsExRequest
+  attr_accessor :destination, :howMany, :maxDepartureAge, :maxFileAge, :offset, :origin
+  def initialize(destination = nil, howMany = nil, maxDepartureAge = nil, maxFileAge = nil, offset = nil, origin = nil)
+    @destination = destination
+    @howMany = howMany
+    @maxDepartureAge = maxDepartureAge
+    @maxFileAge = maxFileAge
+    @offset = offset
+    @origin = origin
+  end 
+  def post
+    "destination=#@destination&howMany=#@howMany&maxDepartureAge=#@maxDepartureAge&maxFileAge=#@maxFileAge&offset=#@offset&origin=#@origin"
+  end
+end
+
+class RoutesBetweenAirportsExResults
+  attr_accessor :routesBetweenAirportsExResult
+  def initialize(routesBetweenAirportsExResult = nil)
+    routesBetweenAirportsExResult = JSON.parse(routesBetweenAirportsExResult)['RoutesBetweenAirportsExResult']
+    @routesBetweenAirportsExResult = ArrayOfRoutesBetweenAirportsExStruct.new([], routesBetweenAirportsExResult['next_offset'])
+    routesBetweenAirportsExResult['data'].each do |route|
+      @routesBetweenAirportsExResult.data << RoutesBetweenAirportsExStruct.new(route['count'],
+                                                                               route['filedAltitude_max'],
+                                                                               route['filedAltitude_min'],
+                                                                               route['last_departuretime'],
+                                                                               route['route']
+                                                                              )
+
+    end
+  end
+end
+
+class ArrayOfRoutesBetweenAirportsExStruct
+  attr_accessor :data, :next_offset
+  def initialize(data = [], next_offset = nil)
+    @data = data
+    @next_offset = next_offset
+  end
+end
+
+
+class RoutesBetweenAirportsExStruct
+  attr_accessor :count, :filedAltitude_max, :filedAltitude_min, :last_departuretime, :route
+  def initialize(count = nil, filedAltitude_max = nil, filedAltitude_min = nil, last_departuretime = nil, route = nil)
+    @count = count
+    @filedAltitude_max = filedAltitude_max
+    @filedAltitude_min = filedAltitude_min
+    @last_departuretime = last_departuretime
+    @route = route
+  end
+end
+
+
+#Scheduled
+class ScheduledRequest
+  attr_accessor :airport, :filter, :howMany, :offset 
+  def initialize(airport = nil, filter = nil, howMany = nil, offset = nil)
+    @airport = airport
+    @filter = filter
+    @howMany = howMany
+    @offset = offset
+  end 
+  def post
+    "airport=#@airport&filter=#@filter&howMany=#@howMany&offset=#@offset"
+  end
+end
+
+class ScheduledResults
+  attr_accessor :scheduledResult
+  def initialize(scheduledResult = nil)
+    scheduledResult = JSON.parse(scheduledResult)['ScheduledResult']
+    @scheduledResult = ScheduledStruct.new(scheduledResult['next_offset'], [])
+    scheduledResult['scheduled'].each do |scheduled|
+      @scheduledResult.scheduled << ScheduledFlightStruct.new(scheduled['aircrafttype'],
+                                                              scheduled['destination'],
+                                                              scheduled['destinationCity'],
+                                                              scheduled['destinationName'],
+                                                              scheduled['estimatedarrivaltime'],
+                                                              scheduled['filed_departuretime'],
+                                                              scheduled['ident'],
+                                                              scheduled['origin'],
+                                                              scheduled['originCity'],
+                                                              scheduled['originName']
+                                                             )
+    end
+  end
+end
+
+class ScheduledStruct
+  attr_accessor :next_offset, :scheduled
+  def initialize (next_offset = nil, scheduled = [])
+    @next_offset = next_offset
+    @scheduled = scheduled
+  end
+end
+
+class ArrivalFlightStruct
+  attr_accessor :aircrafttype, 
+                :destination, 
+                :destinationCity, 
+                :destinationName, 
+                :estimatedarrivaltime,
+                :filed_departuretime,
+                :ident, 
+                :origin, 
+                :originCity, 
+                :originName
+                
+  def initialize(aircrafttype = nil,
+                 destination = nil,
+                 destinationCity = nil,
+                 destinationName = nil,
+                 estimatedarrivaltime = nil,
+                 filed_departuretime = nil,
+                 ident = nil,
+                 origin = nil,
+                 originCity = nil,
+                 originName = nil
+                ) 
+    @aircrafttype = aircrafttype
+    @destination = destination
+    @destinationCity = destinationCity
+    @destinationName = destinationName
+    @estimatedarrivaltime = estimatedarrivaltime
+    @filed_departuretime = filed_departuretime
+    @ident = ident
+    @origin = origin
+    @originCity = originCity
+    @originName = originName
+  end
+end
+
+
+#Search
+class SearchRequest
+  attr_accessor :howMany, :offset, :query 
+  def initialize(howMany = nil, offset = nil, query = nil)
+    @howMany = howMany
+    @offset = offset
+    @query = query
+  end 
+  def post
+    "howMany=#@howMany&offset=#@offset&query=#@query"
+  end
+end
+
+class SearchResults
+  attr_accessor :searchResult
+  def initialize(searchResult = nil)
+    searchResult = JSON.parse(searchResult)['SearchResult']
+    @searchResult = InFlightStruct.new([], searchResult['next_offset'])
+    searchResult['aircraft'].each do |aircraft|
+      @searchResult.aircraft << InFlightAircraftStruct.new(aircraft['altitude'],
+                                                     aircraft['altitudeChange'],
+                                                     aircraft['altitudeStatus'],
+                                                     aircraft['departureTime'],
+                                                     aircraft['destination'],
+                                                     aircraft['faFlightID'],
+                                                     aircraft['firstPositionTime'],
+                                                     aircraft['groundspeed'],
+                                                     aircraft['heading'],
+                                                     aircraft['highLatitude'],
+                                                     aircraft['highLongitude'],
+                                                     aircraft['ident'],
+                                                     aircraft['latitude'],
+                                                     aircraft['longitude'],
+                                                     aircraft['lowLatitude'],
+                                                     aircraft['lowLongitude'],
+                                                     aircraft['origin'],
+                                                     aircraft['prefix'],
+                                                     aircraft['suffix'],
+                                                     aircraft['timeout'],
+                                                     aircraft['timestamp'],
+                                                     aircraft['type'],
+                                                     aircraft['updateType'],
+                                                     aircraft['waypoints']
+                                                    )
+    end
+  end
+end
+
+class InFlightStruct
+  attr_accessor :aircraft, :next_offset
+  def initialize(aircraft = [], next_offset = nil)
+    @aircraft = aircraft
+    @next_offset = next_offset
+  end
+end
+
+
+#SearchBirdseyeInFlight
+class SearchBirdseyeInFlightRequest
+  attr_accessor :howMany, :offset, :query 
+  def initialize(howMany = nil, offset = nil, query = nil)
+    @howMany = howMany
+    @offset = offset
+    @query = query
+  end 
+  def post
+    "howMany=#@howMany&offset=#@offset&query=#@query"
+  end
+end
+
+class SearchBirdseyeInFlightResults
+  attr_accessor :searchBirdseyeInFlightResult
+  def initialize(searchBirdseyeInFlightResult = nil)
+    searchBirdseyeInFlightResult = JSON.parse(searchBirdseyeInFlightResult)['SearchBirdseyeInFlightResult']
+    @searchBirdseyeInFlightResult = InFlightStruct.new([], searchBirdseyeInFlightResult['next_offset'])
+    searchBirdseyeInFlightResult['aircraft'].each do |aircraft|
+      @searchBirdseyeInFlightResult.aircraft << InFlightAircraftStruct.new(aircraft['altitude'],
+                                                                           aircraft['altitudeChange'],
+                                                                           aircraft['altitudeStatus'],
+                                                                           aircraft['departureTime'],
+                                                                           aircraft['destination'],
+                                                                           aircraft['faFlightID'],
+                                                                           aircraft['firstPositionTime'],
+                                                                           aircraft['groundspeed'],
+                                                                           aircraft['heading'],
+                                                                           aircraft['highLatitude'],
+                                                                           aircraft['highLongitude'],
+                                                                           aircraft['ident'],
+                                                                           aircraft['latitude'],
+                                                                           aircraft['longitude'],
+                                                                           aircraft['lowLatitude'],
+                                                                           aircraft['lowLongitude'],
+                                                                           aircraft['origin'],
+                                                                           aircraft['prefix'],
+                                                                           aircraft['suffix'],
+                                                                           aircraft['timeout'],
+                                                                           aircraft['timestamp'],
+                                                                           aircraft['type'],
+                                                                           aircraft['updateType'],
+                                                                           aircraft['waypoints']
+                                                                          )
+    end
+  end
+end
+
+#SearchBirdseyePositions
+class SearchBirdseyePositionsRequest
+  attr_accessor :howMany, :offset, :query, :uniqueFlights 
+  def initialize(howMany = nil, offset = nil, query = nil, uniqueFlights = nil)
+    @howMany = howMany
+    @offset = offset
+    @query = query
+    @uniqueFlights = uniqueFlights
+  end 
+  def post
+    "howMany=#@howMany&offset=#@offset&query=#@query&uniqueFlights=#@uniqueFlights"
+  end
+end
+
+class SearchBirdseyePositionsResults
+  attr_accessor :searchBirdseyePositionsResult
+  def initialize(searchBirdseyePositionsResult = nil)
+    searchBirdseyePositionsResult = JSON.parse(searchBirdseyePositionsResult)['SearchBirdseyePositionsResult']
+    @searchBirdseyePositionsResult = ArrayOfTrackExStruct.new([], searchBirdseyePositionsResult['next_offset'])
+    searchBirdseyePositionsResult['data'].each do |track|
+      @searchBirdseyePositionsResult.data << TrackExStruct.new(track['altitude'],
+                                                               track['altitudeChange'],
+                                                               track['altitudeStatus'],
+                                                               track['faFlightID'],
+                                                               track['groundspeed'],
+                                                               track['latitude'],
+                                                               track['longitude'],
+                                                               track['timestamp'],
+                                                               track['updateType']
+                                                              )
+    end
+  end
+end
+
+class ArrayOfTrackExStruct
+  attr_accessor :data, :next_offset
+  def initialize(data = [], next_offset = nil)
+    @data = data
+    @next_offset = next_offset
+  end
+end
+
+class TrackExStruct
+  attr_accessor :altitude, 
+                :altitudeChange, 
+                :altitudeStatus, 
+                :faFlightID, 
+                :groundspeed, 
+                :latitude, 
+                :longitude, 
+                :timestamp, 
+                :updateType
+                
+  def initialize(altitude = nil,
+                 altitudeChange = nil,
+                 altitudeStatus = nil,
+                 faFlightID = nil,
+                 groundspeed = nil,
+                 latitude = nil,
+                 longitude = nil,
+                 timestamp = nil,
+                 updateType = nil
+                )
+    @altitude = altitude
+    @altitudeChange = altitudeChange
+    @altitudeStatus = altitudeStatus
+    @faFlightID = faFlightID
+    @groundspeed = groundspeed
+    @latitude = latitude
+    @longitude = longitude
+    @timestamp = timestamp
+    @updateType = updateType
+  end
+end
+
+
+#SearchCount
+class SearchCountRequest
+  attr_accessor :query
+  def initialize(query = nil)
+    @query = query
+  end 
+  def post
+    "query=#@query"
+  end
+end
+
+class SearchCountResults
+  attr_accessor :searchCountResult
+  def initialize(searchCountResult = nil)
+    searchCountResult = JSON.parse(searchCountResult)['SearchCountResult']
+    @searchCountResult = searchCountResult
+  end
+end
+
+
+#SetAlert
+class SetAlertRequest
+  attr_accessor :aircrafttype, 
+                :alert_id, 
+                :channels, 
+                :date_end, 
+                :date_start, 
+                :destination, 
+                :enabled, 
+                :ident, 
+                :max_weekly, 
+                :origin
+                
+  def initialize(aircrafttype = nil,
+                 alert_id = nil,
+                 channels = nil,
+                 date_end = nil,
+                 date_start = nil,
+                 destination = nil,
+                 enabled = nil,
+                 ident = nil,
+                 max_weekly = nil,
+                 origin = nil
+                )
+                
+    @aircrafttype = aircrafttype
+    @alert_id = alert_id
+    @channels = channels
+    @date_end = date_end
+    @date_start = date_start
+    @destination = destination
+    @enabled = enabled
+    @ident = ident
+    @max_weekly = max_weekly
+    @origin = origin
+  end 
+  def post
+    "aircrafttype=#@aircrafttype&alert_id=#@alert_id&channels=#@channels&date_end=#@date_end&date_start=#@date_start" + 
+    "&destination=#@destination&enabled=#@enabled&ident=#@ident&max_weekly=#@max_weekly&origin=#@origin"
+  end
+end
+
+class SetAlertResults
+  attr_accessor :setAlertResult
+  def initialize(setAlertResult = nil)
+    setAlertResult = JSON.parse(setAlertResult)['SetAlertResult']
+    @setAlertResult = setAlertResult
+  end
+end
+
+
+#SetMaximumResultSize
+class SetMaximumResultSizeRequest
+  attr_accessor :max_size              
+  def initialize(max_size = nil)            
+    @max_size = max_size
+  end 
+  def post
+    "max_size=#@max_size"
+  end
+end
+
+class SetMaximumResultSizeResults
+  attr_accessor :setMaximumResultSizeResult
+  def initialize(setMaximumResultSizeResult = nil)
+    setMaximumResultSizeResult = JSON.parse(setMaximumResultSizeResult)['SetMaximumResultSizeResult']
+    @setMaximumResultSizeResult = setMaximumResultSizeResult
+  end
+end
+
+
+#Taf
+class TafRequest
+  attr_accessor :airport              
+  def initialize(airport = nil)            
+    @airport = airport
+  end 
+  def post
+    "airport=#@airport"
+  end
+end
+
+class TafResults
+  attr_accessor :tafResult
+  def initialize(tafResult = nil)
+    tafResult = JSON.parse(tafResult)['TafResult']
+    @tafResult = tafResult
+  end
+end
+
+
+#TailOwner
+class TailOwnerRequest
+  attr_accessor :ident              
+  def initialize(ident = nil)            
+    @ident = ident
+  end 
+  def post
+    "ident=#@ident"
+  end
+end
+
+class TailOwnerResults
+  attr_accessor :tailOwnerResult
+  def initialize(tailOwnerResult = nil)
+    tailOwnerResult = JSON.parse(tailOwnerResult)['TailOwnerResult']
+    @tailOwnerResult = TailOwnerStruct.new(tailOwnerResult['location'],
+                                           tailOwnerResult['location2'],
+                                           tailOwnerResult['owner'],
+                                           tailOwnerResult['website']
+                                          )
+  end
+end
+
+class TailOwnerStruct
+  attr_accessor :location, :location2, :owner, :website
+  def initialize(location = nil, location2 = nil, owner = nil, website = nil)
+    @location = location
+    @location2 = location2
+    @owner = owner
+    @website = website
+  end
+end
+
+
+#ZipcodeInfo
+class ZipcodeInfoRequest
+  attr_accessor :zipcode              
+  def initialize(zipcode = nil)            
+    @zipcode = zipcode
+  end 
+  def post
+    "zipcode=#@zipcode"
+  end
+end
+
+class ZipcodeInfoResults
+  attr_accessor :zipcodeInfoResult
+  def initialize(zipcodeInfoResult = nil)
+    zipcodeInfoResult = JSON.parse(zipcodeInfoResult)['ZipcodeInfoResult']
+    @zipcodeInfoResult = ZipcodeInfoStruct.new(zipcodeInfoResult['city'],
+                                               zipcodeInfoResult['county'],
+                                               zipcodeInfoResult['latitude'],
+                                               zipcodeInfoResult['longitude'],
+                                               zipcodeInfoResult['state']    
+                                              )
+  end
+end
+
+class ZipcodeInfoStruct
+  attr_accessor :city, :county, :latitude, :longitude, :state
+  def initialize(city = nil, county = nil, latitude = nil, longitude = nil, state = nil)
+    @city = city
+    @county = county
+    @latitude = latitude
+    @longitude = longitude
+    @state = state
   end
 end

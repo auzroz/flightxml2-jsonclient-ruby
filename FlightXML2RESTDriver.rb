@@ -145,45 +145,58 @@ class FlightXML2REST
   end
   
   def NTaf(nTafRequest)
-    #TODO NTaf
+    @nTafResult = NTafResults.new($api['NTaf'].post nTafRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
-  def RegisterAlertEndpoint(registerAlertEndpoingRequest)
-    #TODO RegisterAlertEndpoint
+  
+  def RegisterAlertEndpoint(registerAlertEndpointRequest)
+    @registerAlertEndpointResult = RegisterAlertEndpointResults.new($api['RegisterAlertEndpoint'].post registerAlertEndpointRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def RoutesBetweenAirports(routesBetweenAirportsRequest)
-    #TODO RoutesBetweenAirports
+    @routesBetweenAirportsResult = RoutesBetweenAirportsResults.new($api['RoutesBetweenAirports'].post routesBetweenAirportsRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def RoutesBetweenAirportsEx(routesBetweenAirportsExRequest)
-    #TODO RoutesBetweenAirportsEx
+    @routesBetweenAirportsExResult = RoutesBetweenAirportsExResults.new($api['RoutesBetweenAirportsEx'].post routesBetweenAirportsExRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def Scheduled(scheduledRequest)
-    #TODO Scheduled
+    @scheduledResult = ScheduledResults.new($api['Scheduled'].post scheduledRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def Search(searchRequest)
-    #TODO Search
+    @searchResult = SearchResults.new($api['Search'].post searchRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def SearchBirdseyeInFlight(searchBirdseyeInFlightRequest)
-    #TODO SearchBirdseyeInFlight
+    @searchBirdseyeInFlightResult = SearchBirdseyeInFlightResults.new($api['SearchBirdseyeInFlight'].post searchBirdseyeInFlightRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def SearchBirdseyePositions(searchBirdseyePositionsRequest)
-    #TODO SearchBirdseyePositions
+    @searchBirdseyePositionsResult = SearchBirdseyePositionsResults.new($api['SearchBirdseyePositions'].post searchBirdseyePositionsRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def SearchCount(searchCountRequest)
-    #TODO SearchCount
+    @searchCountResult = SearchCountResults.new($api['SearchCount'].post searchCountRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def SetAlert(setAlertRequest)
-    #TODO SetAlert
+    @setAlertResult = SetAlertResults.new($api['SetAlert'].post setAlertRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def SetMaximumResultSize(setMaximumResultSizeRequest)
-    #TODO SetMaximumResultSize
+    @setMaximumResultSizeResult = SetMaximumResultSizeResults.new($api['SetMaximumResultSize'].post setMaximumResultSizeRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def Taf(tafRequest)
-    #TODO Taf
+    @tafResult = TafResults.new($api['Taf'].post tafRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
+  
   def TailOwner(tailOwnerRequest)
-    #TODO TailOwner
+    @tailOwnerResult = TailOwnerResults.new($api['TailOwner'].post tailOwnerRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
-  def ZipcodeInfo(zipCodeInfoRequest)
-    #TODO ZipcodeInfo
+  
+  def ZipcodeInfo(zipcodeInfoRequest)
+     @zipcodeInfoResult = ZipcodeInfoResults.new($api['ZipcodeInfo'].post zipcodeInfoRequest.post, :content_type => "application/x-www-form-urlencoded")
   end
 end
