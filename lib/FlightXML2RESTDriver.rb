@@ -1,6 +1,6 @@
 require 'rest-client'
 require 'json'
-require './FlightXML2REST.rb'
+require_relative './FlightXML2REST.rb'
 
 class FlightXML2REST
   DefaultEndpointUrl = "http://flightxml.flightaware.com/json/FlightXML2/"

@@ -349,7 +349,7 @@ class AirportInfoResults
                                                 airportInfoResult['location'],
                                                 airportInfoResult['longitude'],
                                                 airportInfoResult['name'],
-                                                airportInfoResult['timzone'],   
+                                                airportInfoResult['timezone'],   
                                                 )
   end
 end
