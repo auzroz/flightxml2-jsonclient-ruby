@@ -1,3 +1,11 @@
+#Error
+class FlightAwareError
+  attr_accessor :error
+  def initialize(error = nil)
+    @error = error
+  end
+end
+
 #AircraftType
 class AircraftTypeRequest
   attr_accessor :type  
@@ -12,8 +20,13 @@ end
 class AircraftTypeResults
   attr_accessor :aircraftTypeResult
   def initialize(aircraftTypeResult = nil)
-    aircraftTypeResult = JSON.parse(aircraftTypeResult)['AircraftTypeResult']
-    @aircraftTypeResult = AircraftTypeStruct.new(aircraftTypeResult['description'], aircraftTypeResult['manufacturer'], aircraftTypeResult['type'])
+    begin
+      rawAircraftTypeResult = JSON.parse(aircraftTypeResult)
+      aircraftTypeResult = JSON.parse(aircraftTypeResult)['AircraftTypeResult']
+      @aircraftTypeResult = AircraftTypeStruct.new(aircraftTypeResult['description'], aircraftTypeResult['manufacturer'], aircraftTypeResult['type'])
+    rescue
+        raise FlightAwareError.new(rawAircraftTypeResult['error']).error
+    end
   end
 end
 
@@ -40,22 +53,27 @@ end
 class AirlineFlightInfoResults
     attr_accessor :airlineFlightInfoResult
   def initialize(airlineFlightInfoResult = nil)
-    airlineFlightInfoResult = JSON.parse(airlineFlightInfoResult)['AirlineFlightInfoResult']
-    @airlineFlightInfoResult = AirlineFlightInfoStruct.new(
-                                                            airlineFlightInfoResult['bag_claim'],
-                                                            airlineFlightInfoResult['codeshares'],
-                                                            airlineFlightInfoResult['faFlightID'],
-                                                            airlineFlightInfoResult['gate_dest'],
-                                                            airlineFlightInfoResult['gate_orig'],
-                                                            airlineFlightInfoResult['ident'],
-                                                            airlineFlightInfoResult['meal_service'],
-                                                            airlineFlightInfoResult['seats_cabin_business'],
-                                                            airlineFlightInfoResult['seats_cabin_coach'],
-                                                            airlineFlightInfoResult['seats_cabin_first'],
-                                                            airlineFlightInfoResult['tailnumber'],
-                                                            airlineFlightInfoResult['terminal_dest'],
-                                                            airlineFlightInfoResult['terminal_orig']
-                                                          )
+    begin
+      rawAirlineFlightInfoResult = JSON.parse(airlineFlightInfoResult)
+      airlineFlightInfoResult = rawAirlineFlightInfoResult['AirlineFlightInfoResult']
+      @airlineFlightInfoResult = AirlineFlightInfoStruct.new(
+                                                              airlineFlightInfoResult['bag_claim'],
+                                                              airlineFlightInfoResult['codeshares'],
+                                                              airlineFlightInfoResult['faFlightID'],
+                                                              airlineFlightInfoResult['gate_dest'],
+                                                              airlineFlightInfoResult['gate_orig'],
+                                                              airlineFlightInfoResult['ident'],
+                                                              airlineFlightInfoResult['meal_service'],
+                                                              airlineFlightInfoResult['seats_cabin_business'],
+                                                              airlineFlightInfoResult['seats_cabin_coach'],
+                                                              airlineFlightInfoResult['seats_cabin_first'],
+                                                              airlineFlightInfoResult['tailnumber'],
+                                                              airlineFlightInfoResult['terminal_dest'],
+                                                              airlineFlightInfoResult['terminal_orig']
+                                                            )
+    rescue
+        raise FlightAwareError.new(rawAirlineFlightInfoResult['error']).error
+    end
   end
 end
 
@@ -124,21 +142,26 @@ end
 class AirlineFlightSchedulesResults
   attr_accessor :airlineFlightSchedulesResult
   def initialize(airlineFlightSchedulesResult = nil)
-    airlineFlightSchedulesResult = JSON.parse(airlineFlightSchedulesResult)['AirlineFlightSchedulesResult']
-    @airlineFlightSchedulesResult = ArrayOfAirlineFlightScheduleStruct.new([], airlineFlightSchedulesResult['next_offset'])
-    airlineFlightSchedulesResult['data'].each do |data|
-      @airlineFlightSchedulesResult.data << AirlineFlightScheduleStruct.new(data['actual_ident'],
-                                                          data['aircrafttype'],
-                                                          data['arrivaltime'],
-                                                          data['departuretime'],
-                                                          data['destination'],
-                                                          data['ident'],
-                                                          data['meal_service'],
-                                                          data['origin'],
-                                                          data['seats_cabin_business'],
-                                                          data['seats_cabin_coach'],
-                                                          data['seats_cabin_first']
-                                                         )
+    begin
+      rawAirlineFlightSchedulesResult = JSON.parse(airlineFlightSchedulesResult)
+      airlineFlightSchedulesResult = rawAirlineFlightSchedulesResult['AirlineFlightSchedulesResult']
+      @airlineFlightSchedulesResult = ArrayOfAirlineFlightScheduleStruct.new([], airlineFlightSchedulesResult['next_offset'])
+      airlineFlightSchedulesResult['data'].each do |data|
+        @airlineFlightSchedulesResult.data << AirlineFlightScheduleStruct.new(data['actual_ident'],
+                                                            data['aircrafttype'],
+                                                            data['arrivaltime'],
+                                                            data['departuretime'],
+                                                            data['destination'],
+                                                            data['ident'],
+                                                            data['meal_service'],
+                                                            data['origin'],
+                                                            data['seats_cabin_business'],
+                                                            data['seats_cabin_coach'],
+                                                            data['seats_cabin_first']
+                                                           )
+      end
+    rescue
+        raise FlightAwareError.new(rawAirlineFlightSchedulesResult['error']).error
     end
   end
 end
@@ -205,15 +228,20 @@ end
 class AirlineInfoResults
   attr_accessor :airlineInfoResult
   def initialize(airlineInfoResult = nil)
-    airlineInfoResult = JSON.parse(airlineInfoResult)['AirlineInfoResult']
-    @airlineInfoResult = AirlineInfoStruct.new(airlineInfoResult['callsign'],
-                                               airlineInfoResult['country'],
-                                               airlineInfoResult['location'],
-                                               airlineInfoResult['name'],
-                                               airlineInfoResult['phone'],
-                                               airlineInfoResult['shortname'],
-                                               airlineInfoResult['url']
-                                              )
+    begin
+      rawAirlineInfoResult = JSON.parse(airlineInfoResult)
+      airlineInfoResult = rawAirlineInfoResult['AirlineInfoResult']
+      @airlineInfoResult = AirlineInfoStruct.new(airlineInfoResult['callsign'],
+                                                 airlineInfoResult['country'],
+                                                 airlineInfoResult['location'],
+                                                 airlineInfoResult['name'],
+                                                 airlineInfoResult['phone'],
+                                                 airlineInfoResult['shortname'],
+                                                 airlineInfoResult['url']
+                                                )
+    rescue
+        raise FlightAwareError.new(rawAirlineInfoResult['error']).error
+    end
   end
 end
 
@@ -247,25 +275,30 @@ end
 class AirlineInsightResults
   attr_accessor :airlineInsightResult
   def initialize(airlineInsightResult = nil)
-    airlineInsightResult = JSON.parse(airlineInsightResult)['AirlineInsightResult']
-    @airlineInsightResult = ArrayOfAirlineInsightStruct.new([], airlineInsightResult['end_date'], airlineInsightResult['start_date'])
-    airlineInsightResult['data'].each do |data|
-      @airlineInsightResult.data << AirlineInsightStruct.new(data['carrier'],
-                                                          data['destination'],
-                                                          data['fare_max'],
-                                                          data['fare_median'],
-                                                          data['fare_min'],
-                                                          data['flights_performed'],
-                                                          data['flights_scheduled'],
-                                                          data['layover'],
-                                                          data['opcarrier'],
-                                                          data['origin'],
-                                                          data['percent'],
-                                                          data['total_mail'],
-                                                          data['total_passengers'],
-                                                          data['total_payload'],
-                                                          data['total_seats']
-                                                         )
+    begin
+      rawAirlineInsightResult = JSON.parse(airlineInsightResult)
+      airlineInsightResult = rawAirlineInsightResult['AirlineInsightResult']
+      @airlineInsightResult = ArrayOfAirlineInsightStruct.new([], airlineInsightResult['end_date'], airlineInsightResult['start_date'])
+      airlineInsightResult['data'].each do |data|
+        @airlineInsightResult.data << AirlineInsightStruct.new(data['carrier'],
+                                                            data['destination'],
+                                                            data['fare_max'],
+                                                            data['fare_median'],
+                                                            data['fare_min'],
+                                                            data['flights_performed'],
+                                                            data['flights_scheduled'],
+                                                            data['layover'],
+                                                            data['opcarrier'],
+                                                            data['origin'],
+                                                            data['percent'],
+                                                            data['total_mail'],
+                                                            data['total_passengers'],
+                                                            data['total_payload'],
+                                                            data['total_seats']
+                                                           )
+      end
+    rescue
+        raise FlightAwareError.new(rawInboundFlightInfoResult['error']).error
     end
   end
 end
@@ -344,13 +377,18 @@ end
 class AirportInfoResults
   attr_accessor :airportInfoResult
   def initialize(airportInfoResult = nil)
-    airportInfoResult = JSON.parse(airportInfoResult)['AirportInfoResult']
+    begin
+    rawAirportInfoResult = JSON.parse(airportInfoResult)
+    airportInfoResult = rawAirportInfoResult['AirportInfoResult']
     @airportInfoResult = AirportInfoStruct.new(airportInfoResult['latitude'], 
                                                 airportInfoResult['location'],
                                                 airportInfoResult['longitude'],
                                                 airportInfoResult['name'],
                                                 airportInfoResult['timezone'],   
                                                 )
+    rescue
+        raise FlightAwareError.new(rawAirportInfoResult['error']).error
+    end
   end
 end
 
@@ -377,10 +415,15 @@ end
 class AllAirlinesResults
   attr_accessor :allAirlinesResult
   def initialize(allAirlinesResult = nil)
-    allAirlinesResult = JSON.parse(allAirlinesResult)['AllAirlinesResult']
-    @allAirlinesResult = ArrayOfString.new()
-    allAirlinesResult['data'].each do |data|
-      @allAirlinesResult.data << data
+    begin
+      rawAllAirlinesResult = JSON.parse(allAirlinesResult)
+      allAirlinesResult = rawAllAirlinesResult['AllAirlinesResult']
+      @allAirlinesResult = ArrayOfString.new()
+      allAirlinesResult['data'].each do |data|
+        @allAirlinesResult.data << data
+      end
+    rescue
+        raise FlightAwareError.new(rawAllAirlinesResult['error']).error
     end
   end
 end
@@ -404,10 +447,15 @@ end
 class AllAirportsResults
   attr_accessor :allAirportsResult
   def initialize(allAirportsResult = nil)
-    allAirportsResult = JSON.parse(allAirportsResult)['AllAirportsResult']
-    @allAirportsResult = ArrayOfString.new()
-    allAirportsResult['data'].each do |data|
-      @allAirportsResult.data << data
+    begin
+      rawAllAirportsResult = JSON.parse(allAirportsResult)
+      allAirportsResult = rawAllAirportsResult['AllAirportsResult']
+      @allAirportsResult = ArrayOfString.new()
+      allAirportsResult['data'].each do |data|
+        @allAirportsResult.data << data
+      end
+    rescue
+        raise FlightAwareError.new(rawAllAirportsResult['error']).error
     end
   end
 end
@@ -429,20 +477,25 @@ end
 class ArrivedResults
   attr_accessor :arrivedResult
   def initialize(arrivedResult = nil)
-    arrivedResult = JSON.parse(arrivedResult)['ArrivedResult']
-    @arrivedResult = ArrivalStruct.new([], arrivedResult['next_offset'])
-    arrivedResult['arrivals'].each do |arrival|
-      @arrivedResult.arrivals << ArrivalFlightStruct.new(arrival['actualarrivaltime'],
-                                                         arrival['actualdeparturetime'],
-                                                         arrival['aircrafttype'],
-                                                         arrival['destination'],
-                                                         arrival['destinationCity'],
-                                                         arrival['destinationName'],
-                                                         arrival['ident'],
-                                                         arrival['origin'],
-                                                         arrival['originCity'],
-                                                         arrival['originName']
-                                                         )
+    begin
+      rawArrivedResult = JSON.parse(arrivedResult)
+      arrivedResult = rawArrivedResult['ArrivedResult']
+      @arrivedResult = ArrivalStruct.new([], arrivedResult['next_offset'])
+      arrivedResult['arrivals'].each do |arrival|
+        @arrivedResult.arrivals << ArrivalFlightStruct.new(arrival['actualarrivaltime'],
+                                                           arrival['actualdeparturetime'],
+                                                           arrival['aircrafttype'],
+                                                           arrival['destination'],
+                                                           arrival['destinationCity'],
+                                                           arrival['destinationName'],
+                                                           arrival['ident'],
+                                                           arrival['origin'],
+                                                           arrival['originCity'],
+                                                           arrival['originName']
+                                                           )
+      end
+    rescue
+        raise FlightAwareError.new(rawArrivedResult['error']).error
     end
   end
 end
@@ -506,8 +559,13 @@ end
 class BlockIdentCheckResults
   attr_accessor :blockIdentCheckResult
   def initialize(blockIdentCheckResult = nil)
-    blockIdentCheckResult = JSON.parse(blockIdentCheckResult)['BlockIdentCheckResult']
-    @blockIdentCheckResult = blockIdentCheckResult
+    begin
+      rawBlockIdentCheckResult = JSON.parse(blockIdentCheckResult)
+      blockIdentCheckResult = rawBlockIdentCheckResult['BlockIdentCheckResult']
+      @blockIdentCheckResult = blockIdentCheckResult
+    rescue
+        raise FlightAwareError.new(rawBlockIdentCheckResult['error']).error
+    end
   end
 end
 
@@ -526,12 +584,17 @@ end
 class CountAirportOperationsResults
   attr_accessor :countAirportOperationsResult
   def initialize(countAirportOperationsResult = nil)
-    countAirportOperationsResult = JSON.parse(countAirportOperationsResult)['CountAirportOperationsResult']
-    @countAirportOperationsResult = CountAirportOperationsStruct.new(countAirportOperationsResult['departed'], 
-                                                           countAirportOperationsResult['enroute'], 
-                                                           countAirportOperationsResult['scheduled_arrivals'],
-                                                           countAirportOperationsResult['scheduled_departures']
-                                                          )
+    begin
+      rawCountAirportOperationsResult = JSON.parse(countAirportOperationsResult)
+      countAirportOperationsResult = rawCountAirportOperationsResult['CountAirportOperationsResult']
+      @countAirportOperationsResult = CountAirportOperationsStruct.new(countAirportOperationsResult['departed'], 
+                                                             countAirportOperationsResult['enroute'], 
+                                                             countAirportOperationsResult['scheduled_arrivals'],
+                                                             countAirportOperationsResult['scheduled_departures']
+                                                            )
+    rescue
+        raise FlightAwareError.new(rawCountAirportOperatonsResult['error']).error
+    end
   end
 end
 
@@ -559,14 +622,19 @@ end
 class DecodeFlightRouteResults
   attr_accessor :decodeFlightRouteResult
   def initialize(decodeFlightRouteResult = nil)
-    decodeFlightRouteResult= JSON.parse(decodeFlightRouteResult)['DecodeFlightRouteResult']
-    @decodeFlightRouteResult  = ArrayOfFlightRouteStruct.new([],decodeFlightRouteResult['next_offset'])
-    decodeFlightRouteResult['data'].each do |data|
-      @decodeFlightRouteResult.data << FlightRouteStruct.new(data['latitude'],
-                                                             data['longitude'],
-                                                             data['name'],
-                                                             data['type']
-                                                            )
+    begin
+      rawDecodeFlightRouteResult = JSON.parse(decodeFlightRouteResult)
+      decodeFlightRouteResult= rawDecodeFlightRouteResult['DecodeFlightRouteResult']
+      @decodeFlightRouteResult  = ArrayOfFlightRouteStruct.new([],decodeFlightRouteResult['next_offset'])
+      decodeFlightRouteResult['data'].each do |data|
+        @decodeFlightRouteResult.data << FlightRouteStruct.new(data['latitude'],
+                                                               data['longitude'],
+                                                               data['name'],
+                                                               data['type']
+                                                              )
+      end
+    rescue
+        raise FlightAwareError.new(rawDecodeFlightRouteResult['error']).error
     end
   end
 end
@@ -606,14 +674,19 @@ end
 class DecodeRouteResults
   attr_accessor :decodeRouteResult
   def initialize(decodeRouteResult = nil)
-    decodeRouteResult = JSON.parse(decodeRouteResult)['DecodeRouteResult']
-    @decodeRouteResult  = ArrayOfFlightRouteStruct.new([],decodeRouteResult['next_offset'])
-    decodeRouteResult['data'].each do |data|
-      @decodeRouteResult.data << FlightRouteStruct.new(data['latitude'],
-                                                       data['longitude'],
-                                                       data['name'],
-                                                       data['type']
-                                                      )
+    begin
+      rawDecodeRouteResult = JSON.parse(decodeRouteResult)
+      decodeRouteResult = rawDecodeRouteResult['DecodeRouteResult']
+      @decodeRouteResult  = ArrayOfFlightRouteStruct.new([],decodeRouteResult['next_offset'])
+      decodeRouteResult['data'].each do |data|
+        @decodeRouteResult.data << FlightRouteStruct.new(data['latitude'],
+                                                         data['longitude'],
+                                                         data['name'],
+                                                         data['type']
+                                                        )
+      end
+    rescue
+        raise FlightAwareError.new(rawDecodeRouteResult['error']).error
     end
   end
 end
@@ -633,8 +706,13 @@ end
 class DeleteAlertResults
   attr_accessor :deleteAlertResult
   def initialize(deleteAlertResult = nil)
-    deleteAlertResult = JSON.parse(deleteAlertResult)['DeleteAlertResult']
-    @deleteAlertResult = deleteAlertResult
+    begin
+      rawDeleteAlertResult = JSON.parse(deleteAlertResult)
+      deleteAlertResult = rawDeleteAlertResult['DeleteAlertResult']
+      @deleteAlertResult = deleteAlertResult
+    rescue
+        raise FlightAwareError.new(rawDeleteAlertResult['error']).error
+    end
   end
 end
 
@@ -656,21 +734,26 @@ end
 class DepartedResults
   attr_accessor :departedResult
   def initialize(departedResult = nil)
-    departedResult = JSON.parse(departedResult)['DepartedResult']
-    @departedResult = DepartureStruct.new([], departedResult['next_offset'])
-    departedResult['departures'].each do |departure|
-      @departedResult.departures << DepartureFlightStruct.new(departure['actualarrivaltime'],
-                                                              departure['actualdeparturetime'],
-                                                              departure['aircrafttype'],
-                                                              departure['destination'],
-                                                              departure['destinationCity'],
-                                                              departure['destinationName'],
-                                                              departure['estimatedarrivaltime'],
-                                                              departure['ident'],
-                                                              departure['origin'],
-                                                              departure['originCity'],
-                                                              departure['originName']
-                                                              )
+    begin
+      rawDepartedResult = JSON.parse(departedResult)
+      departedResult = rawDepartedResult['DepartedResult']
+      @departedResult = DepartureStruct.new([], departedResult['next_offset'])
+      departedResult['departures'].each do |departure|
+        @departedResult.departures << DepartureFlightStruct.new(departure['actualarrivaltime'],
+                                                                departure['actualdeparturetime'],
+                                                                departure['aircrafttype'],
+                                                                departure['destination'],
+                                                                departure['destinationCity'],
+                                                                departure['destinationName'],
+                                                                departure['estimatedarrivaltime'],
+                                                                departure['ident'],
+                                                                departure['origin'],
+                                                                departure['originCity'],
+                                                                departure['originName']
+                                                                )
+      end
+    rescue
+        raise FlightAwareError.new(rawDepartedResult['error']).error
     end
   end
 end
@@ -740,21 +823,26 @@ end
 class EnrouteResults
   attr_accessor :enrouteResult
   def initialize(enrouteResult = nil)
-    enrouteResult = JSON.parse(enrouteResult)['EnrouteResult']
-    @enrouteResult = EnrouteStruct.new([], enrouteResult['next_offset'])
-    enrouteResult['enroute'].each do |enroute|
-      @enrouteResult.enroute << EnrouteFlightStruct.new(enroute['actualdeparturetime'],
-                                                  enroute['aircrafttype'],
-                                                  enroute['destination'],
-                                                  enroute['destinationCity'],
-                                                  enroute['destinationName'],
-                                                  enroute['estimatedarrivaltime'],
-                                                  enroute['filed_departuretime'],
-                                                  enroute['ident'],
-                                                  enroute['origin'],
-                                                  enroute['originCity'],
-                                                  enroute['originName']
-                                                  )
+    begin
+      rawEnrouteResult = JSON.parse(enrouteResult)
+      enrouteResult = rawEnrouteResult['EnrouteResult']
+      @enrouteResult = EnrouteStruct.new([], enrouteResult['next_offset'])
+      enrouteResult['enroute'].each do |enroute|
+        @enrouteResult.enroute << EnrouteFlightStruct.new(enroute['actualdeparturetime'],
+                                                    enroute['aircrafttype'],
+                                                    enroute['destination'],
+                                                    enroute['destinationCity'],
+                                                    enroute['destinationName'],
+                                                    enroute['estimatedarrivaltime'],
+                                                    enroute['filed_departuretime'],
+                                                    enroute['ident'],
+                                                    enroute['origin'],
+                                                    enroute['originCity'],
+                                                    enroute['originName']
+                                                    )
+      end
+    rescue
+        raise FlightAwareError.new(rawEnrouteResult['error']).error
     end
   end
 end
@@ -822,20 +910,25 @@ end
 class FleetArrivedResults
   attr_accessor :fleetArrivedResult
   def initialize(fleetArrivedResult = nil)
-    fleetArrivedResult = JSON.parse(fleetArrivedResult)['FleetArrivedResult']
-    @fleetArrivedResult = ArrivalStruct.new([], fleetArrivedResult['next_offset'])
-    fleetArrivedResult['arrivals'].each do |arrival|
-      @fleetArrivedResult.arrivals << ArrivalFlightStruct.new(arrival['actualarrivaltime'],
-                                                              arrival['actualdeparturetime'],
-                                                              arrival['aircrafttype'],
-                                                              arrival['destination'],
-                                                              arrival['destinationCity'],
-                                                              arrival['destinationName'],
-                                                              arrival['ident'],
-                                                              arrival['origin'],
-                                                              arrival['originCity'],
-                                                              arrival['originName']
-                                                              )
+    begin
+      rawFleetArrivedResult = JSON.parse(fleetArrivedResult)
+      fleetArrivedResult = rawFleetArrivedResult['FleetArrivedResult']
+      @fleetArrivedResult = ArrivalStruct.new([], fleetArrivedResult['next_offset'])
+      fleetArrivedResult['arrivals'].each do |arrival|
+        @fleetArrivedResult.arrivals << ArrivalFlightStruct.new(arrival['actualarrivaltime'],
+                                                                arrival['actualdeparturetime'],
+                                                                arrival['aircrafttype'],
+                                                                arrival['destination'],
+                                                                arrival['destinationCity'],
+                                                                arrival['destinationName'],
+                                                                arrival['ident'],
+                                                                arrival['origin'],
+                                                                arrival['originCity'],
+                                                                arrival['originName']
+                                                                )
+      end
+    rescue
+        raise FlightAwareError.new(rawFleetArrivedResult['error']).error
     end
   end
 end
@@ -857,20 +950,25 @@ end
 class FleetScheduledResults
   attr_accessor :fleetScheduledResult
   def initialize(fleetScheduledResult = nil)
-    fleetScheduledResult = JSON.parse(fleetScheduledResult)['FleetScheduledResult']
-    @fleetScheduledResult = ScheduledStruct.new(fleetScheduledResult['next_offset'], [])
-    fleetScheduledResult['scheduled'].each do |scheduled|
-      @fleetScheduledResult.scheduled << ScheduledFlightStruct.new(scheduled['aircrafttype'],
-                                                                   scheduled['destination'],
-                                                                   scheduled['destinationCity'],
-                                                                   scheduled['destinationName'],
-                                                                   scheduled['estimatedarrivaltime'],
-                                                                   scheduled['filed_departuretime'],
-                                                                   scheduled['ident'],
-                                                                   scheduled['origin'],
-                                                                   scheduled['originCity'],
-                                                                   scheduled['originName']
-                                                                  )
+    begin
+      rawFleetScheduledResult = JSON.parse(fleetScheduledResult)
+      fleetScheduledResult = rawFleetScheduledResult['FleetScheduledResult']
+      @fleetScheduledResult = ScheduledStruct.new(fleetScheduledResult['next_offset'], [])
+      fleetScheduledResult['scheduled'].each do |scheduled|
+        @fleetScheduledResult.scheduled << ScheduledFlightStruct.new(scheduled['aircrafttype'],
+                                                                     scheduled['destination'],
+                                                                     scheduled['destinationCity'],
+                                                                     scheduled['destinationName'],
+                                                                     scheduled['estimatedarrivaltime'],
+                                                                     scheduled['filed_departuretime'],
+                                                                     scheduled['ident'],
+                                                                     scheduled['origin'],
+                                                                     scheduled['originCity'],
+                                                                     scheduled['originName']
+                                                                    )
+      end
+    rescue
+        raise FlightAwareError.new(rawFleetScheduledResult['error']).error
     end
   end
 end
@@ -935,29 +1033,34 @@ end
 class FlightInfoResults
   attr_accessor :flightInfoResult
   def initialize(flightInfoResult = nil)
-    flightInfoResult = JSON.parse(flightInfoResult)['FlightInfoResult']
-    @flightInfoResult = FlightInfoStruct.new([], flightInfoResult['next_offset'])
-    flightInfoResult['flights'].each do |flight|
-      @flightInfoResult.flights << FlightStruct.new(flight['actualarrivaltime'],
-                                                    flight['actualdeparturetime'],
-                                                    flight['aircrafttype'],
-                                                    flight['destination'],
-                                                    flight['destinationCity'],
-                                                    flight['destinationName'],
-                                                    flight['diverted'],
-                                                    flight['estimatedarrivaltime'],
-                                                    flight['filed_airspeed_kts'],
-                                                    flight['filed_airspeed_mach'],
-                                                    flight['filed_altitude'],
-                                                    flight['filed_departuretime'],
-                                                    flight['filed_ete'],
-                                                    flight['filed_time'],
-                                                    flight['ident'],
-                                                    flight['origin'],
-                                                    flight['originCity'],
-                                                    flight['originName'],
-                                                    flight['route']
-                                                   )
+    begin
+      rawFlightInfoResult = JSON.parse(flightInfoResult)
+      flightInfoResult = rawFlightInfoResult['FlightInfoResult']
+      @flightInfoResult = FlightInfoStruct.new([], flightInfoResult['next_offset'])
+      flightInfoResult['flights'].each do |flight|
+        @flightInfoResult.flights << FlightStruct.new(flight['actualarrivaltime'],
+                                                      flight['actualdeparturetime'],
+                                                      flight['aircrafttype'],
+                                                      flight['destination'],
+                                                      flight['destinationCity'],
+                                                      flight['destinationName'],
+                                                      flight['diverted'],
+                                                      flight['estimatedarrivaltime'],
+                                                      flight['filed_airspeed_kts'],
+                                                      flight['filed_airspeed_mach'],
+                                                      flight['filed_altitude'],
+                                                      flight['filed_departuretime'],
+                                                      flight['filed_ete'],
+                                                      flight['filed_time'],
+                                                      flight['ident'],
+                                                      flight['origin'],
+                                                      flight['originCity'],
+                                                      flight['originName'],
+                                                      flight['route']
+                                                     )
+      end
+    rescue
+        raise FlightAwareError.new(rawFlightInfoResult['error']).error
     end
   end
 end
@@ -1050,30 +1153,35 @@ end
 class FlightInfoExResults
   attr_accessor :flightInfoExResult
   def initialize(flightInfoExResult = nil)
-    flightInfoExResult = JSON.parse(flightInfoExResult)['FlightInfoExResult']
-    @flightInfoExResult = FlightInfoExStruct.new([], flightInfoExResult['next_offset'])
-    flightInfoExResult['flights'].each do |flight|
-      @flightInfoExResult.flights << FlightExStruct.new(flight['actualarrivaltime'],
-                                                    flight['actualdeparturetime'],
-                                                    flight['aircrafttype'],
-                                                    flight['destination'],
-                                                    flight['destinationCity'],
-                                                    flight['destinationName'],
-                                                    flight['diverted'],
-                                                    flight['estimatedarrivaltime'],
-                                                    flight['faFlightID'],
-                                                    flight['filed_airspeed_kts'],
-                                                    flight['filed_airspeed_mach'],
-                                                    flight['filed_altitude'],
-                                                    flight['filed_departuretime'],
-                                                    flight['filed_ete'],
-                                                    flight['filed_time'],
-                                                    flight['ident'],
-                                                    flight['origin'],
-                                                    flight['originCity'],
-                                                    flight['originName'],
-                                                    flight['route']
-                                                   )
+    begin
+      rawFlightInfoResult = JSON.parse(flightInfoExResult)
+      flightInfoExResult = rawFlightInfoResult['FlightInfoExResult']
+      @flightInfoExResult = FlightInfoExStruct.new([], flightInfoExResult['next_offset'])
+      flightInfoExResult['flights'].each do |flight|
+        @flightInfoExResult.flights << FlightExStruct.new(flight['actualarrivaltime'],
+                                                      flight['actualdeparturetime'],
+                                                      flight['aircrafttype'],
+                                                      flight['destination'],
+                                                      flight['destinationCity'],
+                                                      flight['destinationName'],
+                                                      flight['diverted'],
+                                                      flight['estimatedarrivaltime'],
+                                                      flight['faFlightID'],
+                                                      flight['filed_airspeed_kts'],
+                                                      flight['filed_airspeed_mach'],
+                                                      flight['filed_altitude'],
+                                                      flight['filed_departuretime'],
+                                                      flight['filed_ete'],
+                                                      flight['filed_time'],
+                                                      flight['ident'],
+                                                      flight['origin'],
+                                                      flight['originCity'],
+                                                      flight['originName'],
+                                                      flight['route']
+                                                     )
+      end
+    rescue
+        raise FlightAwareError.new(rawFlightInfoResult['error']).error
     end
   end
 end
@@ -1165,37 +1273,42 @@ end
 class GetAlertsResults
   attr_accessor :getAlertsResult
   def initialize(getAlertsResult = nil)
-    getAlertsResult = JSON.parse(getAlertsResult)['GetAlertsResult']
-    @getAlertsResult = FlightAlertListing.new([], getAlertsResult['next_offset'])
-    getAlertsResult['alerts'].each do |alert|
-      myAlert = FlightAlertEntry.new(alert['aircrafttype'],
-                                     alert['alert_changed'],
-                                     alert['alert_created'],
-                                     alert['alert_id'],
-                                     [],
-                                     alert['date_end'],
-                                     alert['date_start'],
-                                     alert['description'],
-                                     alert['destination'],
-                                     alert['enabled'],
-                                     alert['ident'],
-                                     alert['origin'],
-                                     alert['type'],
-                                     alert['user_ident']
-                                    )
-      alert['channels'].each do |channel|
-        myAlert.channels << FlightAlertChannel.new(channel['channel_id'],
-                                          channel['channel_name'],
-                                          channel['e_arrival'],
-                                          channel['e_cancelled'],
-                                          channel['e_departure'],
-                                          channel['e_diverted'],
-                                          channel['e_filed'],
-                                          channel['mask_summary'],
-                                          channel['target_address']
-                                         )
+    begin
+      rawGetAlertsResult = JSON.parse(getAlertsResult)
+      getAlertsResult = rawGetAlertsResult['GetAlertsResult']
+      @getAlertsResult = FlightAlertListing.new([], getAlertsResult['num_alerts'])
+      getAlertsResult['alerts'].each do |alert|
+        myAlert = FlightAlertEntry.new(alert['aircrafttype'],
+                                       alert['alert_changed'],
+                                       alert['alert_created'],
+                                       alert['alert_id'],
+                                       [],
+                                       alert['date_end'],
+                                       alert['date_start'],
+                                       alert['description'],
+                                       alert['destination'],
+                                       alert['enabled'],
+                                       alert['ident'],
+                                       alert['origin'],
+                                       alert['type'],
+                                       alert['user_ident']
+                                      )
+        alert['channels'].each do |channel|
+          myAlert.channels << FlightAlertChannel.new(channel['channel_id'],
+                                            channel['channel_name'],
+                                            channel['e_arrival'],
+                                            channel['e_cancelled'],
+                                            channel['e_departure'],
+                                            channel['e_diverted'],
+                                            channel['e_filed'],
+                                            channel['mask_summary'],
+                                            channel['target_address']
+                                           )
+        end
+        @getAlertsResult.alerts << myAlert
       end
-      @getAlertsResult.alerts << myAlert
+    rescue
+        raise FlightAwareError.new(rawGetAlertsResult['error']).error
     end
   end
 end
@@ -1287,8 +1400,13 @@ end
 class GetFlightIDResults
   attr_accessor :getFlightIDResult
   def initialize(getFlightIDResult = nil)
-    getFlightIDResult = JSON.parse(getFlightIDResult)['GetFlightIDResult']
-    @getFlightIDResult = getFlightIDResult
+    begin
+      rawGetFlightIDResult = JSON.parse(getFlightIDResult)
+      getFlightIDResult = rawGetFlightIDResult['GetFlightIDResult']
+      @getFlightIDResult = getFlightIDResult
+    rescue
+        raise FlightAwareError.new(rawGetFlightIDResult['error']).error
+    end
   end
 end
 
@@ -1307,19 +1425,24 @@ end
 class GetHistoricalTrackResults
   attr_accessor :getHistoricalTrackResult
   def initialize(getHistoricalTrackResult = nil)
-    getHistoricalTrackResult = JSON.parse(getHistoricalTrackResult)['GetHistoricalTrackResult']
-    @getHistoricalTrackResult = ArrayOfTrackStruct.new()
-    getHistoricalTrackResult['data'].each do |data|
-      @getHistoricalTrackResult.data << TrackStruct.new(data['altitude'],
-                                     data['altitudeChange'],
-                                     data['altitudeStatus'],
-                                     data['groundsped'],
-                                     data['latitude'],
-                                     data['longitude'],
-                                     data['timestamp'],
-                                     data['updateType']
-                                    )
-
+    begin
+      rawGetHistoricalTrackResult = JSON.parse(getHistoricalTrackResult)
+      getHistoricalTrackResult = rawGetHistoricalTrackResult['GetHistoricalTrackResult']
+      @getHistoricalTrackResult = ArrayOfTrackStruct.new()
+      getHistoricalTrackResult['data'].each do |data|
+        @getHistoricalTrackResult.data << TrackStruct.new(data['altitude'],
+                                       data['altitudeChange'],
+                                       data['altitudeStatus'],
+                                       data['groundsped'],
+                                       data['latitude'],
+                                       data['longitude'],
+                                       data['timestamp'],
+                                       data['updateType']
+                                      )
+  
+      end
+    rescue
+        raise FlightAwareError.new(rawGetHistoricalTrackResult['error']).error
     end
   end
 end
@@ -1376,19 +1499,24 @@ end
 class GetLastTrackResults
   attr_accessor :getLastTrackResult
   def initialize(getLastTrackResult = nil)
-    getLastTrackResult = JSON.parse(getLastTrackResult)['GetLastTrackResult']
-    @getLastTrackResult = ArrayOfTrackStruct.new()
-    getLastTrackResult['data'].each do |data|
-      @getLastTrackResult.data << TrackStruct.new(data['altitude'],
-                                     data['altitudeChange'],
-                                     data['altitudeStatus'],
-                                     data['groundsped'],
-                                     data['latitude'],
-                                     data['longitude'],
-                                     data['timestamp'],
-                                     data['updateType']
-                                    )
-
+    begin
+      rawGetLastTrackResult = JSON.parse(getLastTrackResult)
+      getLastTrackResult = rawGetLastTrackResult['GetLastTrackResult']
+      @getLastTrackResult = ArrayOfTrackStruct.new()
+      getLastTrackResult['data'].each do |data|
+        @getLastTrackResult.data << TrackStruct.new(data['altitude'],
+                                       data['altitudeChange'],
+                                       data['altitudeStatus'],
+                                       data['groundsped'],
+                                       data['latitude'],
+                                       data['longitude'],
+                                       data['timestamp'],
+                                       data['updateType']
+                                      )
+  
+      end
+    rescue
+        raise FlightAwareError.new(rawGetLastTrackResult['error']).error
     end
   end
 end
@@ -1408,28 +1536,33 @@ end
 class InboundFlightInfoResults
   attr_accessor :inboundFlightInfoResult
   def initialize(inboundFlightInfoResult = nil)
-    inboundFlightInfoResult = JSON.parse(inboundFlightInfoResult)['InboundFlightInfoResult']
-    @inboundFlightInfoResult = FlightExStruct.new(inboundFlightInfoResult['actualarrivaltime'],
-                                                  inboundFlightInfoResult['actualdeparturetime'],
-                                                  inboundFlightInfoResult['aircrafttype'],
-                                                  inboundFlightInfoResult['destination'],
-                                                  inboundFlightInfoResult['destinationCity'],
-                                                  inboundFlightInfoResult['destinationName'],
-                                                  inboundFlightInfoResult['diverted'],
-                                                  inboundFlightInfoResult['estimatedarrivaltime'],
-                                                  inboundFlightInfoResult['faFlightID'],
-                                                  inboundFlightInfoResult['filed_airspeed_kts'],
-                                                  inboundFlightInfoResult['filed_airspeed_mach'],
-                                                  inboundFlightInfoResult['filed_altitude'],
-                                                  inboundFlightInfoResult['filed_departuretime'],
-                                                  inboundFlightInfoResult['filed_ete'],
-                                                  inboundFlightInfoResult['filed_time'],
-                                                  inboundFlightInfoResult['ident'],
-                                                  inboundFlightInfoResult['origin'],
-                                                  inboundFlightInfoResult['originCity'],
-                                                  inboundFlightInfoResult['originName'],
-                                                  inboundFlightInfoResult['route']
-                                                 )
+    begin
+      rawInboundFlightInfoResult = JSON.parse(inboundFlightInfoResult)
+      inboundFlightInfoResult = rawInboundFlightInforResult['InboundFlightInfoResult']
+      @inboundFlightInfoResult = FlightExStruct.new(inboundFlightInfoResult['actualarrivaltime'],
+                                                    inboundFlightInfoResult['actualdeparturetime'],
+                                                    inboundFlightInfoResult['aircrafttype'],
+                                                    inboundFlightInfoResult['destination'],
+                                                    inboundFlightInfoResult['destinationCity'],
+                                                    inboundFlightInfoResult['destinationName'],
+                                                    inboundFlightInfoResult['diverted'],
+                                                    inboundFlightInfoResult['estimatedarrivaltime'],
+                                                    inboundFlightInfoResult['faFlightID'],
+                                                    inboundFlightInfoResult['filed_airspeed_kts'],
+                                                    inboundFlightInfoResult['filed_airspeed_mach'],
+                                                    inboundFlightInfoResult['filed_altitude'],
+                                                    inboundFlightInfoResult['filed_departuretime'],
+                                                    inboundFlightInfoResult['filed_ete'],
+                                                    inboundFlightInfoResult['filed_time'],
+                                                    inboundFlightInfoResult['ident'],
+                                                    inboundFlightInfoResult['origin'],
+                                                    inboundFlightInfoResult['originCity'],
+                                                    inboundFlightInfoResult['originName'],
+                                                    inboundFlightInfoResult['route']
+                                                   )
+    rescue
+        raise FlightAwareError.new(rawInboundFlightInfoResult['error']).error
+    end
   end
 end
 
@@ -1448,33 +1581,37 @@ end
 class InFlightInfoResults
   attr_accessor :inFlightInfoResult
   def initialize(inFlightInfoResult = nil)
-    inFlightInfoResult = JSON.parse(inFlightInfoResult)['InFlightInfoResult']
-    @inFlightInfoResult = InFlightAircraftStruct.new(inFlightInfoResult['altitude'],
-                                                     inFlightInfoResult['altitudeChange'],
-                                                     inFlightInfoResult['altitudeStatus'],
-                                                     inFlightInfoResult['departureTime'],
-                                                     inFlightInfoResult['destination'],
-                                                     inFlightInfoResult['faFlightID'],
-                                                     inFlightInfoResult['firstPositionTime'],
-                                                     inFlightInfoResult['groundspeed'],
-                                                     inFlightInfoResult['heading'],
-                                                     inFlightInfoResult['highLatitude'],
-                                                     inFlightInfoResult['highLongitude'],
-                                                     inFlightInfoResult['ident'],
-                                                     inFlightInfoResult['latitude'],
-                                                     inFlightInfoResult['longitude'],
-                                                     inFlightInfoResult['lowLatitude'],
-                                                     inFlightInfoResult['lowLongitude'],
-                                                     inFlightInfoResult['origin'],
-                                                     inFlightInfoResult['prefix'],
-                                                     inFlightInfoResult['suffix'],
-                                                     inFlightInfoResult['timeout'],
-                                                     inFlightInfoResult['timestamp'],
-                                                     inFlightInfoResult['type'],
-                                                     inFlightInfoResult['updateType'],
-                                                     inFlightInfoResult['waypoints']
-                                                    )
-
+    begin
+      rawInFlightInfoResult = JSON.parse(inFlightInfoResult)
+      inFlightInfoResult = rawInFlightInfoResult['InFlightInfoResult']
+      @inFlightInfoResult = InFlightAircraftStruct.new(inFlightInfoResult['altitude'],
+                                                       inFlightInfoResult['altitudeChange'],
+                                                       inFlightInfoResult['altitudeStatus'],
+                                                       inFlightInfoResult['departureTime'],
+                                                       inFlightInfoResult['destination'],
+                                                       inFlightInfoResult['faFlightID'],
+                                                       inFlightInfoResult['firstPositionTime'],
+                                                       inFlightInfoResult['groundspeed'],
+                                                       inFlightInfoResult['heading'],
+                                                       inFlightInfoResult['highLatitude'],
+                                                       inFlightInfoResult['highLongitude'],
+                                                       inFlightInfoResult['ident'],
+                                                       inFlightInfoResult['latitude'],
+                                                       inFlightInfoResult['longitude'],
+                                                       inFlightInfoResult['lowLatitude'],
+                                                       inFlightInfoResult['lowLongitude'],
+                                                       inFlightInfoResult['origin'],
+                                                       inFlightInfoResult['prefix'],
+                                                       inFlightInfoResult['suffix'],
+                                                       inFlightInfoResult['timeout'],
+                                                       inFlightInfoResult['timestamp'],
+                                                       inFlightInfoResult['type'],
+                                                       inFlightInfoResult['updateType'],
+                                                       inFlightInfoResult['waypoints']
+                                                      )
+    rescue
+        raise FlightAwareError.new(rawInFlightInfoResult['error']).error
+    end
   end
 end
 
@@ -1574,8 +1711,13 @@ end
 class LatLongsToDistanceResults
   attr_accessor :latLongsToDistanceResult
   def initialize(latLongsToDistanceResult = nil)
-    latLongsToDistanceResult = JSON.parse(latLongsToDistanceResult)['LatLongsToDistanceResult']
-    @latLongsToDistanceResult = latLongsToDistanceResult
+    begin
+      rawLatLongsToDistanceResult = JSON.parse(latLongsToDistanceResult)
+      latLongsToDistanceResult = rawLatLongsToDistance['LatLongsToDistanceResult']
+      @latLongsToDistanceResult = latLongsToDistanceResult
+    rescue
+        raise FlightAwareError.new(rawLatLongsToDistanceResult['error']).error
+    end
   end
 end
 
@@ -1597,8 +1739,13 @@ end
 class LatLongsToHeadingResults
   attr_accessor :latLongsToHeadingResult
   def initialize(latLongsToHeadingResult = nil)
-    latLongsToHeadingResult = JSON.parse(latLongsToHeadingResult)['LatLongsToHeadingResult']
-    @latLongsToHeadingResult = latLongsToHeadingResult
+    begin
+      rawLatLongsToHeadingResult = JSON.parse(latLongsToHeadingResult)
+      latLongsToHeadingResult = rawLatLongsToHeadingResult['LatLongsToHeadingResult']
+      @latLongsToHeadingResult = latLongsToHeadingResult
+    rescue
+        raise FlightAwareError.new(rawLatLongsToHeadingResult['error']).error
+    end
   end
 end
 
@@ -1619,8 +1766,13 @@ end
 class MapFlightResults
   attr_accessor :mapFlightResult
   def initialize(mapFlightResult = nil)
-    mapFlightResult = JSON.parse(mapFlightResult)['MapFlightResult']
-    @mapFlightResult = mapFlightResult
+    begin
+      rawMapFlightResult = JSON.parse(mapFlightResult)
+      mapFlightResult = rawMapFlightResult['MapFlightResult']
+      @mapFlightResult = mapFlightResult
+    rescue
+        raise FlightAwareError.new(rawMapFlightResult['error']).error
+    end
   end
 end
 
@@ -1679,8 +1831,13 @@ end
 class MapFlightExResults
   attr_accessor :mapFlightExResult
   def initialize(mapFlightExResult = nil)
-    mapFlightExResult = JSON.parse(mapFlightExResult)['MapFlightExResult']
-    @mapFlightExResult = mapFlightExResult
+    begin
+      rawMapFlightExResult = JSON.parse(mapFlightExResult)
+      mapFlightExResult = rawMapFlightExResult['MapFlightExResult']
+      @mapFlightExResult = mapFlightExResult
+    rescue
+        raise FlightAwareError.new(rawMapFlightExResult['error']).error
+    end
   end
 end
 
@@ -1699,8 +1856,13 @@ end
 class MetarResults
   attr_accessor :metarResult
   def initialize(metarResult = nil)
-    metarResult = JSON.parse(metarResult)['MetarResult']
-    @metarResult = metarResult
+    begin
+      rawMetarResult = JSON.parse(metarResult)
+      metarResult = rawMetarResult['MetarResult']
+      @metarResult = metarResult
+    rescue
+        raise FlightAwareError.new(rawMetarResult['error']).error
+    end
   end
 end
 
@@ -1722,27 +1884,32 @@ end
 class MetarExResults
   attr_accessor :metarExResult
   def initialize(metarExResult = nil)
-    metarExResult = JSON.parse(metarExResult)['MetarExResult']
-    @metarExResult = ArrayOfMetarStruct.new([], metarExResult['next_offset'])
-    metarExResult['metar'].each do |metar|
-      @metarExResult.metar << MetarStruct.new(metar['airport'],
-                                              metar['cloud_altitude'],
-                                              metar['cloud_friendly'],
-                                              metar['cloud_type'],
-                                              metar['conditions'],
-                                              metar['pressure'],
-                                              metar['raw_data'],
-                                              metar['temp_air'],
-                                              metar['temp_dewpoint'],
-                                              metar['temp_relhum'],
-                                              metar['time'],
-                                              metar['visibility'],
-                                              metar['wind_direction'],
-                                              metar['wind_friendly'],
-                                              metar['wind_speed'],
-                                              metar['wind_speed_gust']
-                                             )
-
+    begin
+      rawMetarExResult = JSON.parse(metarExResult)
+      metarExResult = rawMetarExResult['MetarExResult']
+      @metarExResult = ArrayOfMetarStruct.new([], metarExResult['next_offset'])
+      metarExResult['metar'].each do |metar|
+        @metarExResult.metar << MetarStruct.new(metar['airport'],
+                                                metar['cloud_altitude'],
+                                                metar['cloud_friendly'],
+                                                metar['cloud_type'],
+                                                metar['conditions'],
+                                                metar['pressure'],
+                                                metar['raw_data'],
+                                                metar['temp_air'],
+                                                metar['temp_dewpoint'],
+                                                metar['temp_relhum'],
+                                                metar['time'],
+                                                metar['visibility'],
+                                                metar['wind_direction'],
+                                                metar['wind_friendly'],
+                                                metar['wind_speed'],
+                                                metar['wind_speed_gust']
+                                               )
+  
+      end
+    rescue
+        raise FlightAwareError.new(rawMetarExResult['error']).error
     end
   end
 end
@@ -1825,11 +1992,16 @@ end
 class NTafResults
   attr_accessor :nTafResult
   def initialize(nTafResult = nil)
-    nTafResult = JSON.parse(nTafResult)['NTafResult']
-    @nTafResult = TafStruct.new(nTafResult['airport'],
-                                nTafResult['forecast'].each { |v| v},
-                                nTafResult['timeString']
-                               )
+    begin
+      rawNTafResult = JSON.parse(nTafResult)
+      nTafResult = JSON.parse(nTafResult)['NTafResult']
+      @nTafResult = TafStruct.new(nTafResult['airport'],
+                                  nTafResult['forecast'].each { |v| v},
+                                  nTafResult['timeString']
+                                 )
+    rescue
+        raise FlightAwareError.new(rawNTafResultResult['error']).error
+    end
   end
 end
 
@@ -1858,8 +2030,13 @@ end
 class RegisterAlertEndpointResults
   attr_accessor :registerAlertEndpointResult
   def initialize(registerAlertEndpointResult = nil)
-    registerAlertEndpointResult = JSON.parse(registerAlertEndpointResult)['RegisterAlertEndpointResult']
-    @registerAlertEndpointResult = registerAlertEndpointResult
+    begin
+      rawRegisterAlertEndpointResult = JSON.parse(registerAlertEndpointResult)
+      registerAlertEndpointResult = rawRegisterAlertEndpointResult['RegisterAlertEndpointResult']
+      @registerAlertEndpointResult = registerAlertEndpointResult
+    rescue
+        raise FlightAwareError.new(rawRegisterAlertEndpointResult['error']).error
+    end
   end
 end
 
@@ -1879,14 +2056,19 @@ end
 class RoutesBetweenAirportsResults
   attr_accessor :routesBetweenAirportsResult
   def initialize(routesBetweenAirportsResult = nil)
-    routesBetweenAirportsResult = JSON.parse(routesBetweenAirportsResult)['RoutesBetweenAirportsResult']
-    @routesBetweenAirportsResult = ArrayOfRoutesBetweenAirportsStruct.new()
-    routesBetweenAirportsResult['data'].each do |route|
-      @routesBetweenAirportsResult.data << RoutesBetweenAirportsStruct.new(route['count'],
-                                                                            route['filedAltitude'],
-                                                                            route['route']
-                                                                           )
-
+    begin
+      rawRoutesBetweenAirportsResult = JSON.parse(routesBetweenAirportsResult)
+      routesBetweenAirportsResult = rawRoutesBetweenAirportsResult['RoutesBetweenAirportsResult']
+      @routesBetweenAirportsResult = ArrayOfRoutesBetweenAirportsStruct.new()
+      routesBetweenAirportsResult['data'].each do |route|
+        @routesBetweenAirportsResult.data << RoutesBetweenAirportsStruct.new(route['count'],
+                                                                              route['filedAltitude'],
+                                                                              route['route']
+                                                                             )
+  
+      end
+    rescue
+        raise FlightAwareError.new(rawRoutesBetwenAirportsResult['error']).error
     end
   end
 end
@@ -1928,16 +2110,21 @@ end
 class RoutesBetweenAirportsExResults
   attr_accessor :routesBetweenAirportsExResult
   def initialize(routesBetweenAirportsExResult = nil)
-    routesBetweenAirportsExResult = JSON.parse(routesBetweenAirportsExResult)['RoutesBetweenAirportsExResult']
-    @routesBetweenAirportsExResult = ArrayOfRoutesBetweenAirportsExStruct.new([], routesBetweenAirportsExResult['next_offset'])
-    routesBetweenAirportsExResult['data'].each do |route|
-      @routesBetweenAirportsExResult.data << RoutesBetweenAirportsExStruct.new(route['count'],
-                                                                               route['filedAltitude_max'],
-                                                                               route['filedAltitude_min'],
-                                                                               route['last_departuretime'],
-                                                                               route['route']
-                                                                              )
-
+    begin
+      rawRoutesBetweenAirportsExResult = JSON.parse(routesBetwenAirportsExResult)
+      routesBetweenAirportsExResult = rawRoutesBetweenAirportsExResult['RoutesBetweenAirportsExResult']
+      @routesBetweenAirportsExResult = ArrayOfRoutesBetweenAirportsExStruct.new([], routesBetweenAirportsExResult['next_offset'])
+      routesBetweenAirportsExResult['data'].each do |route|
+        @routesBetweenAirportsExResult.data << RoutesBetweenAirportsExStruct.new(route['count'],
+                                                                                 route['filedAltitude_max'],
+                                                                                 route['filedAltitude_min'],
+                                                                                 route['last_departuretime'],
+                                                                                 route['route']
+                                                                                )
+  
+      end
+    rescue
+        raise FlightAwareError.new(rawRoutesBetweenAirportsExResult['error']).error
     end
   end
 end
@@ -1980,20 +2167,25 @@ end
 class ScheduledResults
   attr_accessor :scheduledResult
   def initialize(scheduledResult = nil)
-    scheduledResult = JSON.parse(scheduledResult)['ScheduledResult']
-    @scheduledResult = ScheduledStruct.new(scheduledResult['next_offset'], [])
-    scheduledResult['scheduled'].each do |scheduled|
-      @scheduledResult.scheduled << ScheduledFlightStruct.new(scheduled['aircrafttype'],
-                                                              scheduled['destination'],
-                                                              scheduled['destinationCity'],
-                                                              scheduled['destinationName'],
-                                                              scheduled['estimatedarrivaltime'],
-                                                              scheduled['filed_departuretime'],
-                                                              scheduled['ident'],
-                                                              scheduled['origin'],
-                                                              scheduled['originCity'],
-                                                              scheduled['originName']
-                                                             )
+    begin
+      rawScheduledResult = JSON.parse(scheduledresult)
+      scheduledResult = rawScheduledResult['ScheduledResult']
+      @scheduledResult = ScheduledStruct.new(scheduledResult['next_offset'], [])
+      scheduledResult['scheduled'].each do |scheduled|
+        @scheduledResult.scheduled << ScheduledFlightStruct.new(scheduled['aircrafttype'],
+                                                                scheduled['destination'],
+                                                                scheduled['destinationCity'],
+                                                                scheduled['destinationName'],
+                                                                scheduled['estimatedarrivaltime'],
+                                                                scheduled['filed_departuretime'],
+                                                                scheduled['ident'],
+                                                                scheduled['origin'],
+                                                                scheduled['originCity'],
+                                                                scheduled['originName']
+                                                               )
+      end
+    rescue
+        raise FlightAwareError.new(rawScheduledResult['error']).error
     end
   end
 end
@@ -2059,34 +2251,39 @@ end
 class SearchResults
   attr_accessor :searchResult
   def initialize(searchResult = nil)
-    searchResult = JSON.parse(searchResult)['SearchResult']
-    @searchResult = InFlightStruct.new([], searchResult['next_offset'])
-    searchResult['aircraft'].each do |aircraft|
-      @searchResult.aircraft << InFlightAircraftStruct.new(aircraft['altitude'],
-                                                     aircraft['altitudeChange'],
-                                                     aircraft['altitudeStatus'],
-                                                     aircraft['departureTime'],
-                                                     aircraft['destination'],
-                                                     aircraft['faFlightID'],
-                                                     aircraft['firstPositionTime'],
-                                                     aircraft['groundspeed'],
-                                                     aircraft['heading'],
-                                                     aircraft['highLatitude'],
-                                                     aircraft['highLongitude'],
-                                                     aircraft['ident'],
-                                                     aircraft['latitude'],
-                                                     aircraft['longitude'],
-                                                     aircraft['lowLatitude'],
-                                                     aircraft['lowLongitude'],
-                                                     aircraft['origin'],
-                                                     aircraft['prefix'],
-                                                     aircraft['suffix'],
-                                                     aircraft['timeout'],
-                                                     aircraft['timestamp'],
-                                                     aircraft['type'],
-                                                     aircraft['updateType'],
-                                                     aircraft['waypoints']
-                                                    )
+    begin
+      rawSearchResult = JSON.parse(searchResult)
+      searchResult = rawSearchResult['SearchResult']
+      @searchResult = InFlightStruct.new([], searchResult['next_offset'])
+      searchResult['aircraft'].each do |aircraft|
+        @searchResult.aircraft << InFlightAircraftStruct.new(aircraft['altitude'],
+                                                       aircraft['altitudeChange'],
+                                                       aircraft['altitudeStatus'],
+                                                       aircraft['departureTime'],
+                                                       aircraft['destination'],
+                                                       aircraft['faFlightID'],
+                                                       aircraft['firstPositionTime'],
+                                                       aircraft['groundspeed'],
+                                                       aircraft['heading'],
+                                                       aircraft['highLatitude'],
+                                                       aircraft['highLongitude'],
+                                                       aircraft['ident'],
+                                                       aircraft['latitude'],
+                                                       aircraft['longitude'],
+                                                       aircraft['lowLatitude'],
+                                                       aircraft['lowLongitude'],
+                                                       aircraft['origin'],
+                                                       aircraft['prefix'],
+                                                       aircraft['suffix'],
+                                                       aircraft['timeout'],
+                                                       aircraft['timestamp'],
+                                                       aircraft['type'],
+                                                       aircraft['updateType'],
+                                                       aircraft['waypoints']
+                                                      )
+      end
+    rescue
+        raise FlightAwareError.new(rawSearchResult['error']).error
     end
   end
 end
@@ -2116,34 +2313,39 @@ end
 class SearchBirdseyeInFlightResults
   attr_accessor :searchBirdseyeInFlightResult
   def initialize(searchBirdseyeInFlightResult = nil)
-    searchBirdseyeInFlightResult = JSON.parse(searchBirdseyeInFlightResult)['SearchBirdseyeInFlightResult']
-    @searchBirdseyeInFlightResult = InFlightStruct.new([], searchBirdseyeInFlightResult['next_offset'])
-    searchBirdseyeInFlightResult['aircraft'].each do |aircraft|
-      @searchBirdseyeInFlightResult.aircraft << InFlightAircraftStruct.new(aircraft['altitude'],
-                                                                           aircraft['altitudeChange'],
-                                                                           aircraft['altitudeStatus'],
-                                                                           aircraft['departureTime'],
-                                                                           aircraft['destination'],
-                                                                           aircraft['faFlightID'],
-                                                                           aircraft['firstPositionTime'],
-                                                                           aircraft['groundspeed'],
-                                                                           aircraft['heading'],
-                                                                           aircraft['highLatitude'],
-                                                                           aircraft['highLongitude'],
-                                                                           aircraft['ident'],
-                                                                           aircraft['latitude'],
-                                                                           aircraft['longitude'],
-                                                                           aircraft['lowLatitude'],
-                                                                           aircraft['lowLongitude'],
-                                                                           aircraft['origin'],
-                                                                           aircraft['prefix'],
-                                                                           aircraft['suffix'],
-                                                                           aircraft['timeout'],
-                                                                           aircraft['timestamp'],
-                                                                           aircraft['type'],
-                                                                           aircraft['updateType'],
-                                                                           aircraft['waypoints']
-                                                                          )
+    begin
+      rawSearchBirdseyeInFlightResult = JSON.parse(searchBirdseyeInFlightResult)
+      searchBirdseyeInFlightResult = rawSearchBirdseyeInFlightResult['SearchBirdseyeInFlightResult']
+      @searchBirdseyeInFlightResult = InFlightStruct.new([], searchBirdseyeInFlightResult['next_offset'])
+      searchBirdseyeInFlightResult['aircraft'].each do |aircraft|
+        @searchBirdseyeInFlightResult.aircraft << InFlightAircraftStruct.new(aircraft['altitude'],
+                                                                             aircraft['altitudeChange'],
+                                                                             aircraft['altitudeStatus'],
+                                                                             aircraft['departureTime'],
+                                                                             aircraft['destination'],
+                                                                             aircraft['faFlightID'],
+                                                                             aircraft['firstPositionTime'],
+                                                                             aircraft['groundspeed'],
+                                                                             aircraft['heading'],
+                                                                             aircraft['highLatitude'],
+                                                                             aircraft['highLongitude'],
+                                                                             aircraft['ident'],
+                                                                             aircraft['latitude'],
+                                                                             aircraft['longitude'],
+                                                                             aircraft['lowLatitude'],
+                                                                             aircraft['lowLongitude'],
+                                                                             aircraft['origin'],
+                                                                             aircraft['prefix'],
+                                                                             aircraft['suffix'],
+                                                                             aircraft['timeout'],
+                                                                             aircraft['timestamp'],
+                                                                             aircraft['type'],
+                                                                             aircraft['updateType'],
+                                                                             aircraft['waypoints']
+                                                                            )
+      end
+    rescue
+        raise FlightAwareError.new(rawSearchBirdseyeInFlightResult['error']).error
     end
   end
 end
@@ -2165,19 +2367,24 @@ end
 class SearchBirdseyePositionsResults
   attr_accessor :searchBirdseyePositionsResult
   def initialize(searchBirdseyePositionsResult = nil)
-    searchBirdseyePositionsResult = JSON.parse(searchBirdseyePositionsResult)['SearchBirdseyePositionsResult']
-    @searchBirdseyePositionsResult = ArrayOfTrackExStruct.new([], searchBirdseyePositionsResult['next_offset'])
-    searchBirdseyePositionsResult['data'].each do |track|
-      @searchBirdseyePositionsResult.data << TrackExStruct.new(track['altitude'],
-                                                               track['altitudeChange'],
-                                                               track['altitudeStatus'],
-                                                               track['faFlightID'],
-                                                               track['groundspeed'],
-                                                               track['latitude'],
-                                                               track['longitude'],
-                                                               track['timestamp'],
-                                                               track['updateType']
-                                                              )
+    begin
+      rawSearchBirdseyePositionResult = JSON.parse(searchBirdseyePositionsResult)
+      searchBirdseyePositionsResult = rawSearchBirdseyePositionResult['SearchBirdseyePositionsResult']
+      @searchBirdseyePositionsResult = ArrayOfTrackExStruct.new([], searchBirdseyePositionsResult['next_offset'])
+      searchBirdseyePositionsResult['data'].each do |track|
+        @searchBirdseyePositionsResult.data << TrackExStruct.new(track['altitude'],
+                                                                 track['altitudeChange'],
+                                                                 track['altitudeStatus'],
+                                                                 track['faFlightID'],
+                                                                 track['groundspeed'],
+                                                                 track['latitude'],
+                                                                 track['longitude'],
+                                                                 track['timestamp'],
+                                                                 track['updateType']
+                                                                )
+      end
+    rescue
+        raise FlightAwareError.new(rawSearchBirdseyePositionResult['error']).error
     end
   end
 end
@@ -2238,8 +2445,13 @@ end
 class SearchCountResults
   attr_accessor :searchCountResult
   def initialize(searchCountResult = nil)
-    searchCountResult = JSON.parse(searchCountResult)['SearchCountResult']
-    @searchCountResult = searchCountResult
+    begin
+      rawSearchCountResult = JSON.parse(searchCountResult)
+      searchCountResult = rawSearchCountResult['SearchCountResult']
+      @searchCountResult = searchCountResult
+    rescue
+        raise FlightAwareError.new(rawSearchCountResult['error']).error
+    end
   end
 end
 
@@ -2289,8 +2501,13 @@ end
 class SetAlertResults
   attr_accessor :setAlertResult
   def initialize(setAlertResult = nil)
-    setAlertResult = JSON.parse(setAlertResult)['SetAlertResult']
-    @setAlertResult = setAlertResult
+    begin
+      rawSetAlertResult = JSON.parse(setAlertResult)
+      setAlertResult = rawSetAlertResult['SetAlertResult']
+      @setAlertResult = setAlertResult
+    rescue
+        raise FlightAwareError.new(rawSetAlertResult['error']).error
+    end
   end
 end
 
@@ -2309,8 +2526,13 @@ end
 class SetMaximumResultSizeResults
   attr_accessor :setMaximumResultSizeResult
   def initialize(setMaximumResultSizeResult = nil)
-    setMaximumResultSizeResult = JSON.parse(setMaximumResultSizeResult)['SetMaximumResultSizeResult']
+    begin
+      rawSetMaximumResultSizeResult = JSON.parse(setMaximumResultSizeResult)
+    setMaximumResultSizeResult = rawSetMaximumResultSize['SetMaximumResultSizeResult']
     @setMaximumResultSizeResult = setMaximumResultSizeResult
+    rescue
+        raise FlightAwareError.new(rawSetMaximumResultSizeResult['error']).error
+    end
   end
 end
 
@@ -2329,8 +2551,13 @@ end
 class TafResults
   attr_accessor :tafResult
   def initialize(tafResult = nil)
-    tafResult = JSON.parse(tafResult)['TafResult']
-    @tafResult = tafResult
+    begin
+      rawTafResult = JSON.parse(tafResult)
+      tafResult = rawTafResult['TafResult']
+      @tafResult = tafResult
+    rescue
+        raise FlightAwareError.new(rawTafResult['error']).error
+    end
   end
 end
 
@@ -2349,12 +2576,17 @@ end
 class TailOwnerResults
   attr_accessor :tailOwnerResult
   def initialize(tailOwnerResult = nil)
-    tailOwnerResult = JSON.parse(tailOwnerResult)['TailOwnerResult']
-    @tailOwnerResult = TailOwnerStruct.new(tailOwnerResult['location'],
-                                           tailOwnerResult['location2'],
-                                           tailOwnerResult['owner'],
-                                           tailOwnerResult['website']
-                                          )
+    begin
+      rawTailOwnerResult = JSON.parse(tailOwnerResult)
+      tailOwnerResult = rawTailOwnerResult['TailOwnerResult']
+      @tailOwnerResult = TailOwnerStruct.new(tailOwnerResult['location'],
+                                             tailOwnerResult['location2'],
+                                             tailOwnerResult['owner'],
+                                             tailOwnerResult['website']
+                                            )
+    rescue
+        raise FlightAwareError.new(rawTailOwnerResult['error']).error
+    end
   end
 end
 
@@ -2383,13 +2615,18 @@ end
 class ZipcodeInfoResults
   attr_accessor :zipcodeInfoResult
   def initialize(zipcodeInfoResult = nil)
-    zipcodeInfoResult = JSON.parse(zipcodeInfoResult)['ZipcodeInfoResult']
-    @zipcodeInfoResult = ZipcodeInfoStruct.new(zipcodeInfoResult['city'],
-                                               zipcodeInfoResult['county'],
-                                               zipcodeInfoResult['latitude'],
-                                               zipcodeInfoResult['longitude'],
-                                               zipcodeInfoResult['state']    
-                                              )
+    begin
+      rawZipcodeInfoResult = JSON.parse(zipcodeInfoResult)
+      zipcodeInfoResult = rawZipcodeInfoResult['ZipcodeInfoResult']
+      @zipcodeInfoResult = ZipcodeInfoStruct.new(zipcodeInfoResult['city'],
+                                                 zipcodeInfoResult['county'],
+                                                 zipcodeInfoResult['latitude'],
+                                                 zipcodeInfoResult['longitude'],
+                                                 zipcodeInfoResult['state']    
+                                                )
+    rescue
+        raise FlightAwareError.new(rawZipcodeInfoResult['error']).error
+    end
   end
 end
 
