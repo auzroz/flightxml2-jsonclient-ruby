@@ -298,7 +298,7 @@ class AirlineInsightResults
                                                            )
       end
     rescue
-        raise FlightAwareError.new(rawInboundFlightInfoResult['error']).error
+        raise FlightAwareError.new(rawAirlineInsightResult['error']).error
     end
   end
 end
@@ -1537,8 +1537,9 @@ class InboundFlightInfoResults
   attr_accessor :inboundFlightInfoResult
   def initialize(inboundFlightInfoResult = nil)
     begin
+      pp inboundFlightInfoResult
       rawInboundFlightInfoResult = JSON.parse(inboundFlightInfoResult)
-      inboundFlightInfoResult = rawInboundFlightInforResult['InboundFlightInfoResult']
+      inboundFlightInfoResult = rawInboundFlightInfoResult['InboundFlightInfoResult']
       @inboundFlightInfoResult = FlightExStruct.new(inboundFlightInfoResult['actualarrivaltime'],
                                                     inboundFlightInfoResult['actualdeparturetime'],
                                                     inboundFlightInfoResult['aircrafttype'],
