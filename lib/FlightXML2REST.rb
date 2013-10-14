@@ -1401,10 +1401,14 @@ class GetFlightIDResults
   attr_accessor :getFlightIDResult
   def initialize(getFlightIDResult = nil)
     begin
+      puts getFlightIDResult
       rawGetFlightIDResult = JSON.parse(getFlightIDResult)
+      puts rawGetFlightIDResult
       getFlightIDResult = rawGetFlightIDResult['GetFlightIDResult']
       @getFlightIDResult = getFlightIDResult
     rescue
+      puts "There was an error"
+        puts rawGetFlightIDResult['error']
         raise FlightAwareError.new(rawGetFlightIDResult['error']).error
     end
   end
@@ -1537,7 +1541,6 @@ class InboundFlightInfoResults
   attr_accessor :inboundFlightInfoResult
   def initialize(inboundFlightInfoResult = nil)
     begin
-      pp inboundFlightInfoResult
       rawInboundFlightInfoResult = JSON.parse(inboundFlightInfoResult)
       inboundFlightInfoResult = rawInboundFlightInfoResult['InboundFlightInfoResult']
       @inboundFlightInfoResult = FlightExStruct.new(inboundFlightInfoResult['actualarrivaltime'],
