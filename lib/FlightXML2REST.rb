@@ -96,7 +96,7 @@ class AirlineFlightInfoStruct
                   codeshares = [], 
                   faFlightID = nil, 
                   gate_dest = nil, 
-                  gate_origin = nil, 
+                  gate_orig = nil, 
                   ident = nil, 
                   meal_service = nil, 
                   seats_cabin_business = nil,
