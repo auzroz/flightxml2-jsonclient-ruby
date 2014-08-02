@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'FlightXML2RESTDriver'
-  s.version     = '0.1.5'
+  s.version     = '0.1.6'
   s.date        = '2014-08-01'
   s.summary     = "FlightXML2 Ruby REST Interface"
   s.description = "REST Interface to the FlightAwareXML2 API"

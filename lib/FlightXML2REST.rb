@@ -109,7 +109,7 @@ class AirlineFlightInfoStruct
     @codeshares = codeshares
     @faFlightID = faFlightID 
     @gate_dest = gate_dest 
-    @gate_origin = gate_origin
+    @gate_orig = gate_orig
     @ident = ident
     @meal_service = meal_service 
     @seats_cabin_business = seats_cabin_business
