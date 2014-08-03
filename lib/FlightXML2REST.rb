@@ -1717,7 +1717,7 @@ class LatLongsToDistanceResults
   def initialize(latLongsToDistanceResult = nil)
     begin
       rawLatLongsToDistanceResult = JSON.parse(latLongsToDistanceResult)
-      latLongsToDistanceResult = rawLatLongsToDistance['LatLongsToDistanceResult']
+      latLongsToDistanceResult = rawLatLongsToDistanceResult['LatLongsToDistanceResult']
       @latLongsToDistanceResult = latLongsToDistanceResult
     rescue
         raise FlightAwareError.new(rawLatLongsToDistanceResult['error']).error
