@@ -2172,7 +2172,7 @@ class ScheduledResults
   attr_accessor :scheduledResult
   def initialize(scheduledResult = nil)
     begin
-      rawScheduledResult = JSON.parse(scheduledresult)
+      rawScheduledResult = JSON.parse(scheduledResult)
       scheduledResult = rawScheduledResult['ScheduledResult']
       @scheduledResult = ScheduledStruct.new(scheduledResult['next_offset'], [])
       scheduledResult['scheduled'].each do |scheduled|
